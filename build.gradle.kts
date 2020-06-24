@@ -21,7 +21,7 @@ dependencies {
 
     implementation(springBootStarter("web", "2.3.1.RELEASE"))
 
-    testCompile("junit", "junit", "4.12")
+    testImplementation(springBootStarter("test", "2.3.1.RELEASE"))
 }
 
 configure<JavaPluginConvention> {
