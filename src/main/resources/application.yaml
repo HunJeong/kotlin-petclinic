@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    active: develpoment
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  flyway:
+    enabled: true
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+
+---
+spring:
+  profiles: development
+
+
+---
+spring:
+  profiles: test
+
+
+---
+spring:
+  profiles: production
