@@ -17,6 +17,6 @@ class AuditingFilter: GenericFilterBean() {
 
         val _request = request as HttpServletRequest
         val _response = response as HttpServletResponse
-        logger.info("Request[status=${_response.status} uri=${_request.requestURI}, method=${_request.method}] completed in $elapsed ms")
+        logger.info("[${_request.method} ${_request.requestURI}] status=${_response.status} completed in $elapsed ms")
     }
 }
