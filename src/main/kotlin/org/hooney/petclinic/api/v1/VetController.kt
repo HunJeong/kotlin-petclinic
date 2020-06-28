@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class VetController(val vetRepository: VetRepository) {
 
-    @GetMapping("/api/v1/vets")
+    @GetMapping("/api/v1/vets", produces = ["application/json"])
     fun getVets(): List<Vet> = this.vetRepository.findAll()
 
 }

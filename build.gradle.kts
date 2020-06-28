@@ -19,6 +19,7 @@ fun springBootStarter(module: String, version: String? = null): String =
         "org.springframework.boot:spring-boot-starter-$module${version?.let { ":$version" } ?: ""}"
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect", "1.3.72"))
 
     implementation(springBootStarter("web", "2.3.1.RELEASE"))
     implementation(springBootStarter("jdbc", "2.3.1.RELEASE"))
@@ -27,7 +28,8 @@ dependencies {
 
     implementation("mysql", "mysql-connector-java", "8.0.20")
 
-    implementation(kotlin("reflect", "1.3.72"))
+    implementation("io.springfox", "springfox-swagger2", "2.9.2")
+    implementation("io.springfox", "springfox-swagger-ui", "2.9.2")
 
     testImplementation(springBootStarter("test", "2.3.1.RELEASE")) {
         exclude("org.junit.vintage", "junit-vintage-engine")
