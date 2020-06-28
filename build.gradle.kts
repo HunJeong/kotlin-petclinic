@@ -15,7 +15,7 @@ repositories {
     mavenCentral()
 }
 
-fun springBootStarter(module: String, version: String? = null): Any =
+fun springBootStarter(module: String, version: String? = null): String =
         "org.springframework.boot:spring-boot-starter-$module${version?.let { ":$version" } ?: ""}"
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
@@ -27,7 +27,9 @@ dependencies {
 
     implementation("mysql", "mysql-connector-java", "8.0.20")
 
-    testImplementation(springBootStarter("test", "2.3.1.RELEASE"))
+    testImplementation(springBootStarter("test", "2.3.1.RELEASE")) {
+        exclude("org.junit.vintage", "junit-vintage-engine")
+    }
     testImplementation("com.github.javafaker", "javafaker", "1.0.2")
 }
 
