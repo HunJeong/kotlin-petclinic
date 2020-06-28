@@ -1,6 +1,3 @@
-fun springBootStarter(module: String, version: String? = null): Any =
-    "org.springframework.boot:spring-boot-starter-$module${version?.let { ":$version" } ?: ""}"
-
 plugins {
     java
     kotlin("jvm") version "1.3.72"
@@ -18,14 +15,20 @@ repositories {
     mavenCentral()
 }
 
+fun springBootStarter(module: String, version: String? = null): Any =
+        "org.springframework.boot:spring-boot-starter-$module${version?.let { ":$version" } ?: ""}"
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     implementation(springBootStarter("web", "2.3.1.RELEASE"))
+    implementation(springBootStarter("jdbc", "2.3.1.RELEASE"))
+    implementation(springBootStarter("data-jpa", "2.3.1.RELEASE"))
+    implementation(springBootStarter("validation", "2.3.1.RELEASE"))
 
     implementation("mysql", "mysql-connector-java", "8.0.20")
 
     testImplementation(springBootStarter("test", "2.3.1.RELEASE"))
+    testImplementation("com.github.javafaker", "javafaker", "1.0.2")
 }
 
 configure<JavaPluginConvention> {
