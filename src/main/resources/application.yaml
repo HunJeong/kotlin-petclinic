@@ -10,6 +10,9 @@ spring:
     enabled: true
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  output:
+    ansi:
+      enabled: ALWAYS
 
 
 ---

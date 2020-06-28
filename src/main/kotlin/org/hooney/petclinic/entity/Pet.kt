@@ -16,6 +16,13 @@ class Pet(
 
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    var birthDate: LocalDate? = null
+    var birthDate: LocalDate? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    var owner: Owner? = null
 ) {
+
+    fun isNew() = id == null
+
 }
