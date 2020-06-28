@@ -27,6 +27,8 @@ dependencies {
 
     implementation("mysql", "mysql-connector-java", "8.0.20")
 
+    implementation(kotlin("reflect", "1.3.72"))
+
     testImplementation(springBootStarter("test", "2.3.1.RELEASE")) {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }
