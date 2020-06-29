@@ -16,5 +16,8 @@ interface OwnerRepository: Repository<Owner, Long> {
     @Transactional(readOnly = true)
     fun findByLastName(@Param("lastName") lastName: String): Collection<Owner>
 
+    @Transactional(readOnly = true)
+    fun findAll(): List<Owner>
+
     fun save(owner: Owner)
 }
