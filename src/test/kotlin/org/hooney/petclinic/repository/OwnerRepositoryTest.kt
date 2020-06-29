@@ -9,9 +9,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.test.context.ActiveProfiles
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@ActiveProfiles("test")
 class OwnerRepositoryTest {
 
     @Autowired
@@ -30,6 +33,7 @@ class OwnerRepositoryTest {
             telephone = Faker().phoneNumber().phoneNumber()
         )
         ownerRepository.save(owner)
+        assertNotNull(owner.id)
     }
 
     @Test
@@ -83,4 +87,23 @@ class OwnerRepositoryTest {
         assertFalse(owners.contains(owner2))
     }
 
+    @Test
+    fun deleteById() {
+        var owner = Owner(
+            firstName = Faker().pokemon().name(),
+            lastName = Faker().pokemon().name(),
+            address = Faker().address().fullAddress(),
+            city = Faker().address().city(),
+            telephone = Faker().number().digits(10)
+        )
+        owner = entityManager.persist(owner)
+        ownerRepository.deleteById(owner.id!!)
+        assertNull(ownerRepository.findById(owner.id!!))
+    }
+
+    @Test
+    fun deleteById_NotFound() {
+        val id = Faker().number().randomNumber()
+        assertThrows(EmptyResultDataAccessException::class.java) { ownerRepository.deleteById(id) }
+    }
 }

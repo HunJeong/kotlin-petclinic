@@ -23,7 +23,8 @@ spring:
 ---
 spring:
   profiles: test
-
+  datasource:
+    url: ${DB_URL_TEST}
 
 ---
 spring:

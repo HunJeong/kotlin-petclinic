@@ -20,4 +20,6 @@ interface OwnerRepository: Repository<Owner, Long> {
     fun findAll(): List<Owner>
 
     fun save(owner: Owner)
+
+    fun deleteById(id: Long)
 }
