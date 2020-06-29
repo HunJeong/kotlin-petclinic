@@ -39,7 +39,7 @@ class OwnerRepositoryTest {
             lastName = Faker().pokemon().name(),
             address = Faker().address().fullAddress(),
             city = Faker().address().city(),
-            telephone = Faker().phoneNumber().phoneNumber()
+            telephone = Faker().number().digits(10)
         )
         entityManager.persist(owner)
         assertNull(ownerRepository.findById(Long.MAX_VALUE))
