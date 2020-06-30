@@ -1,6 +1,7 @@
 package org.hooney.petclinic.repository
 
 import com.github.javafaker.Faker
+import org.hooney.petclinic.constants.Profile
 import org.hooney.petclinic.entity.Owner
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -14,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@ActiveProfiles("test")
+@ActiveProfiles(Profile.TEST)
 class OwnerRepositoryTest {
 
     @Autowired
