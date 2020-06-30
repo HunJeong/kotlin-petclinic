@@ -13,7 +13,20 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
 
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
 
 ---
 spring:
@@ -29,3 +42,9 @@ spring:
 ---
 spring:
   profiles: production
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        use_sql_comments: false
