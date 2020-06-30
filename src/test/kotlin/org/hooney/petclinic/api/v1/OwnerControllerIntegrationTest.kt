@@ -1,0 +1,141 @@
+package org.hooney.petclinic.api.v1
+
+import com.github.javafaker.Faker
+import org.hooney.petclinic.constants.Profile
+import org.hooney.petclinic.entity.Owner
+import org.hooney.petclinic.repository.OwnerRepository
+import org.hooney.petclinic.test_utils.contentAsT
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.transaction.annotation.Transactional
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
+@ActiveProfiles(Profile.TEST)
+class OwnerControllerIntegrationTest {
+
+    @Autowired
+    lateinit var mockMvc: MockMvc
+
+    @Autowired
+    lateinit var ownerRepository: OwnerRepository
+
+    @Test
+    fun createOwner() {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+
+        val action = mockMvc.perform(post("/api/v1/owner")
+            .param("firstName", firstName)
+            .param("lastName", lastName)
+            .param("address", address)
+            .param("telephone", telephone)
+        )
+
+        val result = action.andExpect(status().isCreated).andReturn().response.contentAsT(Owner::class.java)
+        assertNotNull(ownerRepository.findById(result.id!!))
+    }
+
+    @Test
+    fun createOwner_miss_required_param() {
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+
+        val action = mockMvc.perform(post("/api/v1/owner")
+            .param("lastName", lastName)
+            .param("address", address)
+            .param("telephone", telephone)
+        )
+
+        action.andExpect(status().isBadRequest)
+    }
+
+//    @Test
+//    fun createOwner_telephone_too_long() {
+//        val firstName = Faker().pokemon().name()
+//        val lastName = Faker().pokemon().name()
+//        val address = Faker().address().fullAddress()
+//        val telephone = Faker().number().digits(15)
+//
+//        val action = mockMvc.perform(post("/api/v1/owner")
+//            .param("firstName", firstName)
+//            .param("lastName", lastName)
+//            .param("address", address)
+//            .param("telephone", telephone)
+//        )
+//
+//        action.andExpect(status().isBadRequest).andDo(print())
+//    }
+//
+//    @Test
+//    fun putOwner() {
+//        val wasFirstName = Faker().pokemon().name()
+//        val wasLastName = Faker().pokemon().name()
+//        val wasAddress = Faker().address().fullAddress()
+//        val wasTelephone = Faker().number().digits(10)
+//        val owner = Owner(
+//            firstName = wasFirstName,
+//            lastName = wasLastName,
+//            address = wasAddress,
+//            telephone = wasTelephone
+//        )
+//        ownerRepository.save(owner)
+//        println(owner)
+//        val firstName = Faker().pokemon().name()
+//        val lastName = Faker().pokemon().name()
+//        val address = Faker().address().fullAddress()
+//        val telephone = Faker().number().digits(10)
+//        val action = mockMvc.perform(put("/api/v1/owners/${owner.id}")
+//            .param("firstName", firstName)
+//            .param("lastName", lastName)
+//            .param("address", address)
+//            .param("telephone", telephone)
+//        )
+//
+//        action.andExpect(status().isOk)
+//        println(owner)
+//        assertEquals(owner.firstName, firstName)
+//        assertEquals(owner.lastName, lastName)
+//        assertEquals(owner.address, address)
+//        assertEquals(owner.telephone, telephone)
+//    }
+
+    @Test
+    fun deleteOwner() {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+        val owner = Owner(
+            firstName = firstName,
+            lastName = lastName,
+            address = address,
+            telephone = telephone
+        )
+        ownerRepository.save(owner)
+
+        mockMvc.perform(delete("/api/v1/owners/${owner.id}"))
+            .andExpect(status().isNoContent)
+        assertNull(ownerRepository.findById(owner.id!!))
+    }
+
+    @Test
+    fun deleteOnwer_no_data() {
+        val id = Faker().number().randomNumber()
+        mockMvc.perform(delete("/api/v1/owners/${id}"))
+            .andExpect(status().isNotFound)
+    }
+
+}
