@@ -3,6 +3,7 @@ package org.hooney.petclinic.repository
 import com.github.javafaker.Faker
 import org.hooney.petclinic.constants.Profile
 import org.hooney.petclinic.entity.Owner
+import org.hooney.petclinic.utils.unwrap
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,7 +48,7 @@ class OwnerRepositoryTest {
             telephone = Faker().number().digits(10)
         )
         entityManager.persist(owner)
-        assertNull(ownerRepository.findById(Long.MAX_VALUE))
+        assertNull(ownerRepository.findById(Long.MAX_VALUE).unwrap())
     }
 
     @Test
@@ -60,11 +61,11 @@ class OwnerRepositoryTest {
             telephone = Faker().number().digits(10)
         )
         owner = entityManager.persist(owner)
-        assertEquals(ownerRepository.findById(owner.id as Long)!!.id, owner.id!!)
+        assertEquals(ownerRepository.findById(owner.id as Long).unwrap()!!.id, owner.id!!)
     }
 
     @Test
-    fun findByLastName() {
+    fun findAllByLastName() {
         val lastName = Faker().pokemon().name()
         var owner = Owner(
             firstName = Faker().pokemon().name(),
@@ -99,7 +100,7 @@ class OwnerRepositoryTest {
         )
         owner = entityManager.persist(owner)
         ownerRepository.deleteById(owner.id!!)
-        assertNull(ownerRepository.findById(owner.id!!))
+        assertNull(ownerRepository.findById(owner.id!!).unwrap())
     }
 
     @Test

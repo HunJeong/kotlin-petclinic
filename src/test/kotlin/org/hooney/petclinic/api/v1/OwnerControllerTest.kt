@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import java.util.*
 
 
 @WebMvcTest(OwnerController::class)
@@ -66,7 +67,7 @@ class OwnerControllerTest {
         val owner = Owner(id)
         //given
         given(this.ownerRepository.findById(id))
-            .willReturn(owner)
+            .willReturn(Optional.of(owner))
 
         //when
         val action = mockMvc.perform(get("/api/v1/owners/$id"))
@@ -81,7 +82,7 @@ class OwnerControllerTest {
         val id = Faker().number().randomNumber()
         //given
         given(this.ownerRepository.findById(id))
-            .willReturn(null)
+            .willReturn(Optional.empty())
 
         //when
         val action = mockMvc.perform(get("/api/v1/$id"))

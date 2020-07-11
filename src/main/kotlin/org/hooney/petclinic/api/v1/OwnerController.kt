@@ -2,14 +2,12 @@ package org.hooney.petclinic.api.v1
 
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.repository.OwnerRepository
+import org.hooney.petclinic.utils.unwrap
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import javax.validation.constraints.Digits
-import javax.validation.constraints.Max
 
 @RestController
 class OwnerController(val ownerRepository: OwnerRepository) {
@@ -47,7 +45,7 @@ class OwnerController(val ownerRepository: OwnerRepository) {
         @RequestParam(required = false) city: String?,
         @RequestParam(required = false) telephone: String?
     ): Owner {
-        return (this.ownerRepository.findById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND))
+        return (this.ownerRepository.findById(id).unwrap() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND))
             .apply { firstName?.let { this.firstName = firstName } }
             .apply { lastName?.let { this.lastName = lastName } }
             .apply { address?.let { this.address = address } }

@@ -32,7 +32,7 @@ class Owner(
     @Digits(fraction = 0, integer = 12)
     var telephone: String? = null,
 
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "owner")
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "owner")
     var pets: MutableSet<Pet> = mutableSetOf()
 ) {
 
