@@ -3,6 +3,7 @@ package org.hooney.petclinic.api.v1
 import com.github.javafaker.Faker
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.repository.OwnerRepository
+import org.hooney.petclinic.service.OwnerService
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
 
 
-@WebMvcTest(OwnerController::class)
+@WebMvcTest(OwnerController::class, OwnerService::class)
 class OwnerControllerTest {
 
     @Autowired
@@ -41,7 +42,7 @@ class OwnerControllerTest {
     @Test
     fun getOwners_notEmpty() {
         //given
-        given(this.ownerRepository.findAll())
+        given(ownerRepository.findAll())
             .willReturn(listOf(
                 Owner(1, "World", "Hello"),
                 Owner(2, "World", "Hell")
@@ -53,10 +54,8 @@ class OwnerControllerTest {
         //then
         action.andExpect(status().isOk)
             .andExpect(jsonPath("$").isArray)
-            .andExpect(jsonPath("$[0].id").value(1))
             .andExpect(jsonPath("$[0].firstName").value("World"))
             .andExpect(jsonPath("$[0].lastName").value("Hello"))
-            .andExpect(jsonPath("$[1].id").value(2))
             .andExpect(jsonPath("$[1].firstName").value("World"))
             .andExpect(jsonPath("$[1].lastName").value("Hell"))
     }
@@ -74,7 +73,7 @@ class OwnerControllerTest {
 
         //then
         action.andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(id))
+            .andExpect(jsonPath("$.firstName").value(owner.firstName))
     }
 
     @Test

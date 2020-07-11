@@ -37,15 +37,15 @@ class OwnerControllerIntegrationTest {
         val address = Faker().address().fullAddress()
         val telephone = Faker().number().digits(10)
 
+        assertEquals(ownerRepository.count(), 0)
         val action = mockMvc.perform(post("/api/v1/owner")
             .param("firstName", firstName)
             .param("lastName", lastName)
             .param("address", address)
             .param("telephone", telephone)
         )
-
-        val result = action.andExpect(status().isCreated).andReturn().response.contentAsT(Owner::class.java)
-        assertNotNull(ownerRepository.findById(result.id!!).unwrap())
+        action.andExpect(status().isCreated)
+        assertEquals(ownerRepository.count(), 1)
     }
 
     @Test

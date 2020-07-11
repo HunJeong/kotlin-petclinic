@@ -2,6 +2,7 @@ package org.hooney.petclinic.api.v1
 
 import org.hooney.petclinic.entity.Vet
 import org.hooney.petclinic.repository.VetRepository
+import org.hooney.petclinic.service.VetService
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 
@@ -12,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
-@WebMvcTest(VetController::class)
+@WebMvcTest(VetController::class, VetService::class)
 class VetControllerTest {
 
     @Autowired
@@ -50,10 +51,8 @@ class VetControllerTest {
         //then
         action.andExpect(status().isOk)
             .andExpect(jsonPath("$").isArray)
-            .andExpect(jsonPath("$[0].id").value(1))
             .andExpect(jsonPath("$[0].firstName").value("World"))
             .andExpect(jsonPath("$[0].lastName").value("Hello"))
-            .andExpect(jsonPath("$[1].id").value(2))
             .andExpect(jsonPath("$[1].firstName").value("World"))
             .andExpect(jsonPath("$[1].lastName").value("Hell"))
     }
