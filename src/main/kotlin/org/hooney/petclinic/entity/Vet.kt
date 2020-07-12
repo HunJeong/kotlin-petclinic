@@ -5,10 +5,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "vets")
 class Vet(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-
     @Column(name = "first_name")
     var firstName: String? = null,
 
@@ -21,7 +17,7 @@ class Vet(
             inverseJoinColumns = [JoinColumn(name = "speciality_id")]
     )
     var specialties: MutableSet<Speciality> = mutableSetOf()
-) {
+): Base() {
 
     private fun getSpecialitiesInternal() = specialties
     private fun setSpecialitiesInternal(specialties: MutableSet<Speciality>) { this.specialties = specialties }

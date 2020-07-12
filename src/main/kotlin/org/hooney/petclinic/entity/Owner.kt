@@ -9,10 +9,6 @@ import javax.validation.constraints.NotEmpty
 @Table(name = "owners")
 @DynamicUpdate
 class Owner(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-
     @Column(name = "first_name")
     @NotEmpty
     var firstName: String? = null,
@@ -36,7 +32,7 @@ class Owner(
 
     @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "owner")
     var pets: MutableSet<Pet> = mutableSetOf()
-) {
+): Base() {
 
     fun fullName() = "${firstName ?: ""} ${lastName ?: ""}".trim()
 

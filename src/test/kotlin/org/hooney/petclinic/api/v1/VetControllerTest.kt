@@ -41,8 +41,8 @@ class VetControllerTest {
         //given
         given(this.vetRepository.findAll())
             .willReturn(listOf(
-                Vet(1, "World", "Hello"),
-                Vet(2, "World", "Hell")
+                Vet("World", "Hello").also { it.id = 1 },
+                Vet("World", "Hell").also { it.id = 2 }
             ))
 
         //when

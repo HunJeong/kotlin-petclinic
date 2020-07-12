@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS vets (
   INDEX(last_name)
 ) engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
-CREATE TABLE IF NOT EXISTS specialties (
+CREATE TABLE IF NOT EXISTS specialities (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(80),
   INDEX(name)
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS vet_specialties (
   vet_id BIGINT UNSIGNED NOT NULL,
   speciality_id BIGINT UNSIGNED NOT NULL,
   FOREIGN KEY (vet_id) REFERENCES vets(id),
-  FOREIGN KEY (speciality_id) REFERENCES specialties(id),
+  FOREIGN KEY (speciality_id) REFERENCES specialities(id),
   UNIQUE (vet_id,speciality_id)
 ) engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 

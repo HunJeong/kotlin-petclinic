@@ -106,10 +106,12 @@ class OwnerControllerIntegrationTest {
         )
 
         action.andExpect(status().isOk)
-        assertEquals(owner.firstName, firstName)
-        assertEquals(owner.lastName, lastName)
-        assertEquals(owner.address, address)
-        assertEquals(owner.telephone, telephone)
+
+        val updated_owner = ownerRepository.findById(owner.id!!).unwrap()
+        assertEquals(updated_owner?.firstName, firstName)
+        assertEquals(updated_owner?.lastName, lastName)
+        assertEquals(updated_owner?.address, address)
+        assertEquals(updated_owner?.telephone, telephone)
     }
 
     @Test

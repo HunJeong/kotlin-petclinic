@@ -7,10 +7,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "pets")
 class Pet(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-
     @Column(name = "name")
     var name: String? = null,
 
@@ -21,8 +17,4 @@ class Pet(
     @ManyToOne
     @JoinColumn(name = "owner_id")
     var owner: Owner? = null
-) {
-
-    fun isNew() = id == null
-
-}
+): Base()

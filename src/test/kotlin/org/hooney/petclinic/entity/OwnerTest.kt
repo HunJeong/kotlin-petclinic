@@ -58,8 +58,8 @@ internal class OwnerTest {
 
     @Test
     fun getPets_이름_순_정렬() {
-        val pet1 = Pet(1, "Puppy")
-        val pet2 = Pet(2, "Dog")
+        val pet1 = Pet("Puppy").also { it.id = 1 }
+        val pet2 = Pet("Dog").also { it.id = 2 }
         val pets = mutableSetOf(pet1, pet2)
         val owner = Owner(pets = pets)
 
@@ -73,7 +73,7 @@ internal class OwnerTest {
     fun addPet_새_Pet() {
         val name = Faker().pokemon().name()
         val pet = Pet(name = name)
-        val owner = Owner(1)
+        val owner = Owner().also { it.id = 1 }
 
         assertNull(owner.getPet(name))
         owner.addPet(pet)
@@ -84,8 +84,8 @@ internal class OwnerTest {
     @Test
     fun addPet_Persistence_Pet() {
         val name = Faker().pokemon().name()
-        val pet = Pet(1, name = name)
-        val owner = Owner(1)
+        val pet = Pet(name = name).also { it.id = 1 }
+        val owner = Owner().also { it.id = 1 }
 
         assertNull(owner.getPet(name))
         owner.addPet(pet)
@@ -96,7 +96,7 @@ internal class OwnerTest {
     @Test
     fun getPet_이름으로() {
         val name = Faker().pokemon().name()
-        val pet = Pet(1, name)
+        val pet = Pet(name).also { it.id = 1 }
         val owner = Owner(pets = mutableSetOf(pet))
 
         assertTrue(owner.getPet(name.toUpperCase()) === pet)

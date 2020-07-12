@@ -9,7 +9,7 @@ class PetTypeTest {
     @Test
     fun getName() {
         val name = Faker().pokemon().name()
-        val petType = PetType(1, name)
+        val petType = PetType(name).also { it.id = 1 }
         assertEquals(petType.name, name)
     }
 

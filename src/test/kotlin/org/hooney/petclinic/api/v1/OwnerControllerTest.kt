@@ -44,8 +44,8 @@ class OwnerControllerTest {
         //given
         given(ownerRepository.findAll())
             .willReturn(listOf(
-                Owner(1, "World", "Hello"),
-                Owner(2, "World", "Hell")
+                Owner("World", "Hello").also { it.id = 1 },
+                Owner("World", "Hell").also { it.id = 2 }
             ))
 
         //when
@@ -63,7 +63,7 @@ class OwnerControllerTest {
     @Test
     fun getOwner_exist() {
         val id = Faker().number().randomNumber()
-        val owner = Owner(id)
+        val owner = Owner().also { it.id = 1 }
         //given
         given(this.ownerRepository.findById(id))
             .willReturn(Optional.of(owner))
