@@ -13,10 +13,10 @@ CREATE TABLE IF NOT EXISTS specialties (
 
 CREATE TABLE IF NOT EXISTS vet_specialties (
   vet_id BIGINT UNSIGNED NOT NULL,
-  specialty_id BIGINT UNSIGNED NOT NULL,
+  speciality_id BIGINT UNSIGNED NOT NULL,
   FOREIGN KEY (vet_id) REFERENCES vets(id),
-  FOREIGN KEY (specialty_id) REFERENCES specialties(id),
-  UNIQUE (vet_id,specialty_id)
+  FOREIGN KEY (speciality_id) REFERENCES specialties(id),
+  UNIQUE (vet_id,speciality_id)
 ) engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE IF NOT EXISTS types (
