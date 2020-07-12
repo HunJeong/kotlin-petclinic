@@ -4,14 +4,12 @@ import com.github.javafaker.Faker
 import org.hooney.petclinic.constants.Profile
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.repository.OwnerRepository
-import org.hooney.petclinic.test_utils.contentAsT
 import org.hooney.petclinic.utils.unwrap
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*

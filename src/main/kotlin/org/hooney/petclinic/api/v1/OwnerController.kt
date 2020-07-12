@@ -1,9 +1,6 @@
 package org.hooney.petclinic.api.v1
 
-import org.hooney.petclinic.entity.Owner
-import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.service.OwnerService
-import org.hooney.petclinic.utils.unwrap
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

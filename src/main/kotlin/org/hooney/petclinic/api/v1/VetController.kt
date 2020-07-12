@@ -1,7 +1,5 @@
 package org.hooney.petclinic.api.v1
 
-import org.hooney.petclinic.entity.Vet
-import org.hooney.petclinic.repository.VetRepository
 import org.hooney.petclinic.service.VetService
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
