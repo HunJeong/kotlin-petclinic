@@ -1,11 +1,13 @@
 package org.hooney.petclinic.entity
 
+import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
 import javax.validation.constraints.Digits
 import javax.validation.constraints.NotEmpty
 
 @Entity
 @Table(name = "owners")
+@DynamicUpdate
 class Owner(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
