@@ -12,12 +12,12 @@ open class Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     var created_at: Date? = null
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     var updated_at: Date? = null
