@@ -27,7 +27,6 @@ class Owner(
 
     @Column(name = "telephone")
     @NotEmpty
-    @Digits(fraction = 0, integer = 12)
     var telephone: String? = null,
 
     @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "owner")

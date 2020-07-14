@@ -16,5 +16,23 @@ class Pet(
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    var owner: Owner? = null
-): Base()
+    var owner: Owner? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    var type: PetType? = null,
+
+    @OneToMany(mappedBy = "pet", cascade = [CascadeType.ALL])
+    var visits: MutableSet<Visit> = mutableSetOf()
+): Base() {
+
+    private fun getVisitsInternal() = visits
+    private fun setVisitsInternal(visits: MutableSet<Visit>) { this.visits = visits }
+
+    fun getVisits(): List<Visit> = getVisitsInternal().toList()
+
+    fun addVisit(visit: Visit) {
+        if(visit.isNew()) { getVisitsInternal().add(visit) }
+        visit.pet = this
+    }
+}
