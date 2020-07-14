@@ -5,6 +5,6 @@ import javax.persistence.*
 @Entity
 @Table(name="types")
 class PetType(
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     var name: String? = null
 ): Base()
