@@ -1,9 +1,8 @@
 package org.hooney.petclinic.entity
 
 import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.UpdateTimestamp
-import java.util.*
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @MappedSuperclass
@@ -12,15 +11,13 @@ open class Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    var created_at: Date? = null
+    var createdAt: LocalDateTime? = null
 
     @Column(name = "updated_at", nullable = false)
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    var updated_at: Date? = null
+    var updatedAt: LocalDateTime? = null
 
     fun isNew() = id == null
 }
