@@ -14,11 +14,11 @@ class Pet(
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     var birthDate: LocalDate? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     var owner: Owner? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id")
     var type: PetType? = null,
 

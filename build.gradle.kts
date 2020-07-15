@@ -53,6 +53,11 @@ tasks {
     }
 }
 
+allOpen {
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Entity")
+}
+
 flyway {
     url = System.getenv("DB_URL")
     user = System.getenv("DB_USERNAME")

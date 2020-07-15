@@ -1,13 +1,12 @@
 package org.hooney.petclinic.repository
 
-import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.entity.Pet
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
+import org.springframework.data.jpa.repository.Query
 
-@Repository
 interface PetRepository: JpaRepository<Pet, Long> {
 
-    fun findAllByOwnerId(ownerId: Long): List<Pet>
+    @Query(value = "SELECT * FROM pets where owner_id = ?1", nativeQuery = true)
+    fun findAllByOwnerIdWithoutOwner(ownerId: Long): List<Pet>
 
 }
