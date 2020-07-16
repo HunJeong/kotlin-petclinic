@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 
@@ -61,22 +62,23 @@ class OwnerControllerIntegrationTest {
         action.andExpect(status().isBadRequest)
     }
 
-//    @Test
-//    fun createOwner_telephone_too_long() {
-//        val firstName = Faker().pokemon().name()
-//        val lastName = Faker().pokemon().name()
-//        val address = Faker().address().fullAddress()
-//        val telephone = Faker().number().digits(15)
-//
-//        val action = mockMvc.perform(post("/api/v1/owner")
-//            .param("firstName", firstName)
-//            .param("lastName", lastName)
-//            .param("address", address)
-//            .param("telephone", telephone)
-//        )
-//
-//        action.andExpect(status().isBadRequest).andDo(print())
-//    }
+    @Test
+    fun createOwner_telephone_too_long() {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(15)
+
+        val action = mockMvc.perform(post("/api/v1/owner")
+            .param("firstName", firstName)
+            .param("lastName", lastName)
+            .param("address", address)
+            .param("telephone", telephone)
+        )
+
+        action.andExpect(status().isBadRequest)
+        assertEquals(ownerRepository.count(), 0)
+    }
 
     @Test
     fun putOwner() {
@@ -111,6 +113,13 @@ class OwnerControllerIntegrationTest {
         assertEquals(updated_owner?.address, address)
         assertEquals(updated_owner?.telephone, telephone)
     }
+
+//    @Test
+//    fun putOwner_owner_not_found() {
+//        val action = mockMvc.perform(put("/api/v1/owners/999"))
+//
+//        action.andExpect(status().isNotFound).andDo(MockMvcResultHandlers.print())
+//    }
 
     @Test
     fun deleteOwner() {
