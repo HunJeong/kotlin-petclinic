@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 import javax.validation.constraints.Size
 
 @RestController
@@ -45,6 +44,6 @@ class OwnerController(val ownerService: OwnerService) {
     fun deleteOwner(@PathVariable id: Long) = try {
         ownerService.deleteOwner(id)
     } catch (e: EmptyResultDataAccessException) {
-        throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        throw OwnerNotFoundException()
     }
 }

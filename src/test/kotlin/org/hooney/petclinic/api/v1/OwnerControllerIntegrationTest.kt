@@ -114,12 +114,12 @@ class OwnerControllerIntegrationTest {
         assertEquals(updated_owner?.telephone, telephone)
     }
 
-//    @Test
-//    fun putOwner_owner_not_found() {
-//        val action = mockMvc.perform(put("/api/v1/owners/999"))
-//
-//        action.andExpect(status().isNotFound).andDo(MockMvcResultHandlers.print())
-//    }
+    @Test
+    fun putOwner_owner_not_found() {
+        val action = mockMvc.perform(put("/api/v1/owners/999"))
+
+        action.andExpect(status().isNotFound).andDo(MockMvcResultHandlers.print())
+    }
 
     @Test
     fun deleteOwner() {
