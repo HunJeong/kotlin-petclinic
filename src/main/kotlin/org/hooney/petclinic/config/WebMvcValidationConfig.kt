@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("org.hooney.petclinic")
 class WebMvcValidationConfig: WebMvcConfigurer {
     @Bean
     fun methodValidationPostProcessor() = MethodValidationPostProcessor()
