@@ -3,7 +3,7 @@ plugins {
     kotlin("jvm") version "1.3.72"
 
     kotlin("plugin.spring") version "1.3.72"
-    kotlin("plugin.allopen") version "1.3.72"
+    kotlin("plugin.jpa") version "1.3.72"
 
     id("org.springframework.boot") version "2.3.1.RELEASE"
     id("org.flywaydb.flyway") version "6.4.4"
@@ -56,11 +56,6 @@ tasks {
     test {
         useJUnitPlatform()
     }
-}
-
-allOpen {
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Entity")
 }
 
 flyway {
