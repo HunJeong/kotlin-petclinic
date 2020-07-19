@@ -5,8 +5,11 @@ plugins {
     kotlin("plugin.spring") version "1.3.72"
     kotlin("plugin.allopen") version "1.3.72"
 
+    id("org.springframework.boot") version "2.3.1.RELEASE"
     id("org.flywaydb.flyway") version "6.4.4"
 }
+
+apply(plugin = "io.spring.dependency-management")
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
@@ -15,23 +18,25 @@ repositories {
     mavenCentral()
 }
 
-fun springBootStarter(module: String, version: String? = null): String =
-        "org.springframework.boot:spring-boot-starter-$module${version?.let { ":$version" } ?: ""}"
+fun springBootStarter(module: String): String = "org.springframework.boot:spring-boot-starter-$module"
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect", "1.3.72"))
+    implementation(kotlin("reflect"))
 
-    implementation(springBootStarter("web", "2.3.1.RELEASE"))
-    implementation(springBootStarter("jdbc", "2.3.1.RELEASE"))
-    implementation(springBootStarter("data-jpa", "2.3.1.RELEASE"))
-    implementation(springBootStarter("validation", "2.3.1.RELEASE"))
+    implementation(springBootStarter("web")) {
+        exclude("org.springframework.boot", "spring-boot-starter-tomcat")
+    }
+    implementation(springBootStarter("undertow"))
+    implementation(springBootStarter("jdbc"))
+    implementation(springBootStarter("data-jpa"))
+    implementation(springBootStarter("validation"))
 
     implementation("mysql", "mysql-connector-java", "8.0.20")
 
     implementation("io.springfox", "springfox-swagger2", "2.9.2")
     implementation("io.springfox", "springfox-swagger-ui", "2.9.2")
 
-    testImplementation(springBootStarter("test", "2.3.1.RELEASE")) {
+    testImplementation(springBootStarter("test")) {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }
     testImplementation("com.github.javafaker", "javafaker", "1.0.2")
