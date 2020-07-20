@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service
 @Service
 class OwnerService(val ownerRepository: OwnerRepository) {
 
-    fun getOwners() = ownerRepository.findAll().map { OwnerResponse(it) }
+    fun getOwners() = ownerRepository.findAll()
 
-    fun getOwner(id: Long) = ownerRepository.findById(id).unwrap()?.let { OwnerResponse(it) }
+    fun getOwner(id: Long) = ownerRepository.findById(id).unwrap()
 
     fun createOwner(
             firstName: String,
@@ -19,13 +19,13 @@ class OwnerService(val ownerRepository: OwnerRepository) {
             address: String,
             city: String?,
             telephone: String
-    ) = Owner(
+    ): Owner = Owner(
             firstName = firstName,
             lastName = lastName,
             address = address,
             city = city,
             telephone = telephone
-    ).let { ownerRepository.save(it); OwnerResponse(it) }
+    ).let { ownerRepository.save(it) }
 
     fun putOwner(
             id: Long,
@@ -41,7 +41,7 @@ class OwnerService(val ownerRepository: OwnerRepository) {
         city?.let { this.city = city }
         telephone?.let { this.telephone = telephone }
         ownerRepository.save(this)
-    }?.let { OwnerResponse(it) }
+    }
 
     fun deleteOwner(id: Long) = ownerRepository.deleteById(id)
 }

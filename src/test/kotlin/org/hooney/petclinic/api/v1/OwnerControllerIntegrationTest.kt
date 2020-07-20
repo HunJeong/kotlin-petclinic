@@ -4,16 +4,21 @@ import com.github.javafaker.Faker
 import org.hooney.petclinic.constants.Profile
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.repository.OwnerRepository
+import org.hooney.petclinic.test_utils.HttpBodyBuilder
 import org.hooney.petclinic.utils.unwrap
+import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.HandlerResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 
@@ -37,11 +42,14 @@ class OwnerControllerIntegrationTest {
         val telephone = Faker().number().digits(10)
 
         assertEquals(ownerRepository.count(), 0)
-        val action = mockMvc.perform(post("/api/v1/owner")
-            .param("firstName", firstName)
-            .param("lastName", lastName)
-            .param("address", address)
-            .param("telephone", telephone)
+        val action = mockMvc.perform(post("/api/v1/owners")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
         )
         action.andExpect(status().isCreated)
         assertEquals(ownerRepository.count(), 1)
@@ -53,12 +61,14 @@ class OwnerControllerIntegrationTest {
         val address = Faker().address().fullAddress()
         val telephone = Faker().number().digits(10)
 
-        val action = mockMvc.perform(post("/api/v1/owner")
-            .param("lastName", lastName)
-            .param("address", address)
-            .param("telephone", telephone)
+        val action = mockMvc.perform(post("/api/v1/owners")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
         )
-
         action.andExpect(status().isBadRequest)
     }
 
@@ -69,11 +79,14 @@ class OwnerControllerIntegrationTest {
         val address = Faker().address().fullAddress()
         val telephone = Faker().number().digits(15)
 
-        val action = mockMvc.perform(post("/api/v1/owner")
-            .param("firstName", firstName)
-            .param("lastName", lastName)
-            .param("address", address)
-            .param("telephone", telephone)
+        val action = mockMvc.perform(post("/api/v1/owners")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
         )
 
         action.andExpect(status().isBadRequest)
@@ -98,14 +111,17 @@ class OwnerControllerIntegrationTest {
         val lastName = Faker().pokemon().name()
         val address = Faker().address().fullAddress()
         val telephone = Faker().number().digits(10)
-        val action = mockMvc.perform(put("/api/v1/owners/${owner.id}")
-            .param("firstName", firstName)
-            .param("lastName", lastName)
-            .param("address", address)
-            .param("telephone", telephone)
+        val action = mockMvc.perform(put("/api/v1/owners/${owner.id!!}")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
         )
 
-        action.andExpect(status().isOk)
+        action.andExpect(status().isOk).andDo(print())
 
         val updated_owner = ownerRepository.findById(owner.id!!).unwrap()
         assertEquals(updated_owner?.firstName, firstName)
@@ -116,9 +132,36 @@ class OwnerControllerIntegrationTest {
 
     @Test
     fun putOwner_owner_not_found() {
-        val action = mockMvc.perform(put("/api/v1/owners/999"))
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+        val action = mockMvc.perform(put("/api/v1/owners/999").contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
+        )
+        action.andExpect(status().isNotFound)
+    }
 
-        action.andExpect(status().isNotFound).andDo(MockMvcResultHandlers.print())
+    @Test
+    fun putOwner_owner_invalid_body() {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(20)
+        val action = mockMvc.perform(put("/api/v1/owners/999").contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
+        )
+        action.andExpect(status().isBadRequest)
     }
 
     @Test
@@ -135,7 +178,7 @@ class OwnerControllerIntegrationTest {
         )
         ownerRepository.save(owner)
 
-        mockMvc.perform(delete("/api/v1/owners/${owner.id}"))
+        mockMvc.perform(delete("/api/v1/owners/${owner.id!!}"))
             .andExpect(status().isNoContent)
         assertNull(ownerRepository.findById(owner.id!!).unwrap())
     }

@@ -73,7 +73,7 @@ class OwnerControllerTest {
 
         //then
         action.andExpect(status().isOk)
-            .andExpect(jsonPath("$.firstName").value(owner.firstName))
+            .andExpect(jsonPath("$.firstName").value(owner.firstName!!))
     }
 
     @Test

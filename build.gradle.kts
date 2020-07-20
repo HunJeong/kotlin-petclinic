@@ -63,3 +63,9 @@ flyway {
     user = System.getenv("DB_USERNAME")
     password = System.getenv("DB_PASSWORD")
 }
+
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
