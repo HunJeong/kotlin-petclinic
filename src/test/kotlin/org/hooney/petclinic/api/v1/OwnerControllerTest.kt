@@ -2,33 +2,33 @@ package org.hooney.petclinic.api.v1
 
 import com.github.javafaker.Faker
 import org.hooney.petclinic.entity.Owner
-import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.service.OwnerService
+import org.hooney.petclinic.test_utils.HttpBodyBuilder
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import java.util.*
 
 
-@WebMvcTest(OwnerController::class, OwnerService::class)
+@WebMvcTest(OwnerController::class)
 class OwnerControllerTest {
 
     @Autowired
     lateinit var mockMvc: MockMvc
 
     @MockBean
-    lateinit var ownerRepository: OwnerRepository
-
+    lateinit var ownerService: OwnerService
 
     @Test
     fun getOwners_empty() {
         //given
-        given(ownerRepository.findAll())
+        given(ownerService.getOwners())
             .willReturn(listOf())
 
         //when
@@ -42,7 +42,7 @@ class OwnerControllerTest {
     @Test
     fun getOwners_notEmpty() {
         //given
-        given(ownerRepository.findAll())
+        given(ownerService.getOwners())
             .willReturn(listOf(
                 Owner("World", "Hello").also { it.id = 1 },
                 Owner("World", "Hell").also { it.id = 2 }
@@ -63,10 +63,10 @@ class OwnerControllerTest {
     @Test
     fun getOwner_exist() {
         val id = Faker().number().randomNumber()
-        val owner = Owner().also { it.id = 1 }
+        val owner = Owner(firstName = Faker().pokemon().name()).also { it.id = 1 }
         //given
-        given(this.ownerRepository.findById(id))
-            .willReturn(Optional.of(owner))
+        given(ownerService.getOwner(id))
+            .willReturn(owner)
 
         //when
         val action = mockMvc.perform(get("/api/v1/owners/$id"))
@@ -80,13 +80,71 @@ class OwnerControllerTest {
     fun getOwner_notExist() {
         val id = Faker().number().randomNumber()
         //given
-        given(this.ownerRepository.findById(id))
-            .willReturn(Optional.empty())
+        given(ownerService.getOwner(id))
+            .willReturn(null)
 
         //when
         val action = mockMvc.perform(get("/api/v1/$id"))
 
         //then
         action.andExpect(status().isNotFound)
+    }
+
+    @Test
+    fun createOwner_miss_required_param() {
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+
+        val action = mockMvc.perform(
+            MockMvcRequestBuilders.post("/api/v1/owners")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
+        )
+        action.andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun createOwner_telephone_too_long() {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(15)
+
+        val action = mockMvc.perform(
+            MockMvcRequestBuilders.post("/api/v1/owners")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(HttpBodyBuilder(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
+        )
+
+        action.andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun putOwner_owner_invalid_body() {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(20)
+        val action = mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/v1/owners/999").contentType(MediaType.APPLICATION_JSON)
+            .content(
+                HttpBodyBuilder(
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "address" to address,
+                "telephone" to telephone
+            ).build())
+        )
+        action.andExpect(status().isBadRequest)
     }
 }

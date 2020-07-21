@@ -13,19 +13,19 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
-@WebMvcTest(VetController::class, VetService::class)
+@WebMvcTest(VetController::class)
 class VetControllerTest {
 
     @Autowired
     lateinit var mockMvc: MockMvc
 
     @MockBean
-    lateinit var vetRepository: VetRepository
+    lateinit var vetService: VetService
 
     @Test
     fun getVets_데이터가_없으면_빈_배열() {
         //given
-        given(this.vetRepository.findAll())
+        given(vetService.getAllVets())
             .willReturn(listOf())
 
         //when
@@ -39,7 +39,7 @@ class VetControllerTest {
     @Test
     fun getVets_데이터가_있음() {
         //given
-        given(this.vetRepository.findAll())
+        given(vetService.getAllVets())
             .willReturn(listOf(
                 Vet("World", "Hello").also { it.id = 1 },
                 Vet("World", "Hell").also { it.id = 2 }

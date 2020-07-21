@@ -10,6 +10,6 @@ class PetTypeService(
     val petTypeRepository: PetTypeRepository
 ) {
 
-    fun findAll(): List<PetTypeResponse> = petTypeRepository.findAll().map { PetTypeResponse(it) }
+    fun findAll() = petTypeRepository.findAll()
 
 }

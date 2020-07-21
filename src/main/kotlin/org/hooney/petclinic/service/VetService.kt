@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service
 class VetService(
         val vetRepository: VetRepository
 ) {
-    fun getAllVets() = vetRepository.findAll().map { VetResponse(it) }
+    fun getAllVets() = vetRepository.findAll()
 }

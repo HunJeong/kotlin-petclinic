@@ -56,44 +56,6 @@ class OwnerControllerIntegrationTest {
     }
 
     @Test
-    fun createOwner_miss_required_param() {
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(10)
-
-        val action = mockMvc.perform(post("/api/v1/owners")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(HttpBodyBuilder(
-                "lastName" to lastName,
-                "address" to address,
-                "telephone" to telephone
-            ).build())
-        )
-        action.andExpect(status().isBadRequest)
-    }
-
-    @Test
-    fun createOwner_telephone_too_long() {
-        val firstName = Faker().pokemon().name()
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(15)
-
-        val action = mockMvc.perform(post("/api/v1/owners")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(HttpBodyBuilder(
-                "firstName" to firstName,
-                "lastName" to lastName,
-                "address" to address,
-                "telephone" to telephone
-            ).build())
-        )
-
-        action.andExpect(status().isBadRequest)
-        assertEquals(ownerRepository.count(), 0)
-    }
-
-    @Test
     fun putOwner() {
         val wasFirstName = Faker().pokemon().name()
         val wasLastName = Faker().pokemon().name()
@@ -148,23 +110,6 @@ class OwnerControllerIntegrationTest {
     }
 
     @Test
-    fun putOwner_owner_invalid_body() {
-        val firstName = Faker().pokemon().name()
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(20)
-        val action = mockMvc.perform(put("/api/v1/owners/999").contentType(MediaType.APPLICATION_JSON)
-            .content(HttpBodyBuilder(
-                "firstName" to firstName,
-                "lastName" to lastName,
-                "address" to address,
-                "telephone" to telephone
-            ).build())
-        )
-        action.andExpect(status().isBadRequest)
-    }
-
-    @Test
     fun deleteOwner() {
         val firstName = Faker().pokemon().name()
         val lastName = Faker().pokemon().name()
@@ -184,7 +129,7 @@ class OwnerControllerIntegrationTest {
     }
 
     @Test
-    fun deleteOnwer_no_data() {
+    fun deleteOwner_no_data() {
         val id = Faker().number().randomNumber()
         mockMvc.perform(delete("/api/v1/owners/${id}"))
             .andExpect(status().isNotFound)

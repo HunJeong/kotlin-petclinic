@@ -13,20 +13,20 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
-@WebMvcTest(PetTypeController::class, PetTypeService::class)
+@WebMvcTest(PetTypeController::class)
 class PetTypeControllerTest {
 
     @Autowired
     lateinit var mockMvc: MockMvc
 
     @MockBean
-    lateinit var petTypeRepository: PetTypeRepository
+    lateinit var petTypeService: PetTypeService
 
     @Test
     fun getPetTypes() {
         //given
         val petType = PetType(Faker().pokemon().name())
-        given(petTypeRepository.findAll()).willReturn(mutableListOf(petType))
+        given(petTypeService.findAll()).willReturn(listOf(petType))
 
         //when
         val action = mockMvc.perform(get("/api/v1/pet_types"))
