@@ -2,9 +2,7 @@ package org.hooney.petclinic.entity
 
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
+import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 
 @Entity
@@ -19,6 +17,6 @@ class Visit(
     var description: String? = null,
 
     @Column(name = "pet_id")
-    var petId: Int? = null
+    var petId: Long? = null
     ): Base() {
 }

@@ -22,7 +22,7 @@ class Pet(
     @JoinColumn(name = "type_id")
     var type: PetType? = null,
 
-    @OneToMany(mappedBy = "pet", cascade = [CascadeType.ALL])
+    @Transient
     var visits: MutableSet<Visit> = mutableSetOf()
 ): Base() {
 
@@ -33,6 +33,6 @@ class Pet(
 
     fun addVisit(visit: Visit) {
         if(visit.isNew()) { getVisitsInternal().add(visit) }
-        visit.pet = this
+        visit.petId = id
     }
 }
