@@ -6,6 +6,7 @@ import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.repository.PetRepository
 import org.hooney.petclinic.repository.VisitRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Service
 class VisitService(
@@ -17,6 +18,10 @@ class VisitService(
     fun getVisits(ownerId: Long, petId: Long): List<Visit> {
         val id = petRepository.getByIdAndOwnerId(petId, ownerId)?.id ?: throw PetNotFoundException()
         return visitRepository.findAllByPetId(id)
+    }
+
+    fun createVisit(ownerId: Long, petId: Long, description: String, date: LocalDate): Visit {
+        return visitRepository.save(Visit(petId = petId, description = description, date = date))
     }
 
 }
