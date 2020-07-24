@@ -25,7 +25,7 @@ class PetService(
             name = name,
             birthDate = birthDate,
             owner = ownerRepository.findById(ownerId).unwrap() ?: throw OwnerNotFoundException(),
-            type = petTypeRepository.findByNameOne(type) ?: throw PetTypeNotFoundException()
+            type = petTypeRepository.findByName(type) ?: throw PetTypeNotFoundException()
         ).apply { petRepository.save(this) }
     }
 

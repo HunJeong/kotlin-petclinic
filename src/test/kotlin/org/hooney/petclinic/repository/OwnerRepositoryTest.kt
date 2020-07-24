@@ -73,19 +73,10 @@ class OwnerRepositoryTest {
             city = Faker().address().city(),
             telephone = Faker().number().digits(10)
         )
-        var owner2 = Owner(
-            firstName = Faker().pokemon().name(),
-            lastName = Faker().leagueOfLegends().champion(),
-            address = Faker().address().fullAddress(),
-            city = Faker().address().city(),
-            telephone = Faker().number().digits(10)
-        )
         owner = entityManager.persist(owner)
-        owner2 = entityManager.persist(owner2)
 
-        val owners = ownerRepository.findByLastName(lastName)
-        assertTrue(owners.contains(owner))
-        assertFalse(owners.contains(owner2))
+        val resultOwner = ownerRepository.findByLastName(lastName)
+        assertTrue(resultOwner!!.id == owner.id)
     }
 
     @Test

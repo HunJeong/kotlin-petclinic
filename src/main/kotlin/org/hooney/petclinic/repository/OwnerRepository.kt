@@ -9,11 +9,11 @@ import java.util.*
 
 interface OwnerRepository: JpaRepository<Owner, Long> {
 
-    @Query(value = "SELECT owner FROM Owner owner left join fetch owner.pets WHERE owner.id =:id")
+    @Query(value = "SELECT * FROM owners WHERE id = :id", nativeQuery = true)
     @Transactional(readOnly = true)
     override fun findById(@Param("id") id: Long): Optional<Owner>
 
-    @Query(value = "SELECT DISTINCT owner FROM Owner owner left join fetch owner.pets WHERE owner.lastName LIKE :lastName%")
+    @Query(value = "SELECT * FROM owners WHERE last_name = :last_name", nativeQuery = true)
     @Transactional(readOnly = true)
-    fun findByLastName(@Param("lastName") lastName: String): Collection<Owner>
+    fun findByLastName(@Param("last_name") lastName: String): Owner?
 }

@@ -16,7 +16,7 @@ class VisitService(
 ) {
 
     fun getVisits(ownerId: Long, petId: Long): List<Visit> {
-        val id = petRepository.getByIdAndOwnerId(petId, ownerId)?.id ?: throw PetNotFoundException()
+        val id = petRepository.findByIdAndOwnerId(petId, ownerId)?.id ?: throw PetNotFoundException()
         return visitRepository.findAllByPetId(id)
     }
 

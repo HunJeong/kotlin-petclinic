@@ -43,5 +43,7 @@ class OwnerService(val ownerRepository: OwnerRepository) {
         ownerRepository.save(this)
     }
 
-    fun deleteOwner(id: Long) = ownerRepository.deleteById(id)
+    fun deleteOwner(id: Long) {
+        ownerRepository.deleteById(id)
+    }
 }

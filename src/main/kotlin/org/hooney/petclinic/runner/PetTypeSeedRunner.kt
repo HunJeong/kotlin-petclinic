@@ -20,6 +20,6 @@ class PetTypeSeedRunner(): ApplicationRunner {
             PetType("Sapsal"),
             PetType("Poodle"),
             PetType("Mix")
-        ).map { petType -> petTypeRepository.findByNameOne(petType.name!!) ?: petTypeRepository.save(petType) }
+        ).map { petType -> petTypeRepository.findByName(petType.name!!) ?: petTypeRepository.save(petType) }
     }
 }
