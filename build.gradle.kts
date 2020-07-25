@@ -27,7 +27,6 @@ dependencies {
         exclude("org.springframework.boot", "spring-boot-starter-tomcat")
     }
     implementation(springBootStarter("undertow"))
-    implementation(springBootStarter("jdbc"))
     implementation(springBootStarter("data-jpa"))
     implementation(springBootStarter("validation"))
 
@@ -40,7 +39,6 @@ dependencies {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }
     testImplementation("com.github.javafaker", "javafaker", "1.0.2")
-    testImplementation("com.h2database", "h2", "1.4.200")
 }
 
 configure<JavaPluginConvention> {
