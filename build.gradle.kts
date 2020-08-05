@@ -6,10 +6,10 @@ plugins {
     kotlin("plugin.jpa") version "1.3.72"
 
     id("org.springframework.boot") version "2.3.1.RELEASE"
+    id("io.spring.dependency-management") version "1.0.9.RELEASE"
+
     id("org.flywaydb.flyway") version "6.4.4"
 }
-
-apply(plugin = "io.spring.dependency-management")
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
