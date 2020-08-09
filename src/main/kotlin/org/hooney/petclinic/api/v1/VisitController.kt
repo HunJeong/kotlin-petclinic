@@ -1,6 +1,6 @@
 package org.hooney.petclinic.api.v1
 
-import org.hooney.petclinic.api.v1.request.VisitRequest
+import org.hooney.petclinic.api.v1.request.VisitCreateRequest
 import org.hooney.petclinic.api.v1.response.VisitResponse
 import org.hooney.petclinic.service.VisitService
 import org.springframework.http.HttpStatus
@@ -21,7 +21,7 @@ class VisitController(val visitService: VisitService) {
     fun postVisits(
         @PathVariable ownerId: Long,
         @PathVariable petId: Long,
-        @RequestBody @Valid body: VisitRequest.VisitCreateRequest
+        @RequestBody @Valid body: VisitCreateRequest
     ) = VisitResponse(visitService.createVisit(ownerId, petId, body.description, body.date))
 
 }
