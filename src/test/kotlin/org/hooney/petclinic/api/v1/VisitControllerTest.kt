@@ -11,8 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
@@ -103,6 +105,26 @@ class VisitControllerTest {
 
         //then
         action.andExpect(status().isBadRequest)
+    }
+
+    @Test
+    fun putVisits_invalid_description() {
+        val ownerId = Faker().number().randomNumber()
+        val petId = Faker().number().randomNumber()
+        val visitId = Faker().number().randomNumber()
+        val wasDescription = ""
+        val wasDate = Faker().date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val wasDateString = wasDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+        val action = mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/v1/owners/$ownerId/pets/$petId/visits/$visitId").contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    HttpBodyBuilder(
+                        "description" to wasDescription,
+                        "date" to wasDateString
+                    ).build())
+        )
+        action.andExpect(status().isBadRequest).andDo(print())
     }
 
 }

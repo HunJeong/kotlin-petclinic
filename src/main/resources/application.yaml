@@ -42,7 +42,7 @@ spring:
 spring:
   profiles: test
   datasource:
-    url: "jdbc:mysql:replication//${PETCLINIC_TEST_DB_USER_NAME}:${PETCLINIC_TEST_DB_USER_PASSWORD}@${PETCLINIC_TEST_DB_HOST_URL},${PETCLINIC_TEST_DB_USER_NAME}:${PETCLINIC_TEST_DB_USER_PASSWORD}@${PETCLINIC_TEST_DB_HOST_URL}/${PETCLINIC_TEST_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&allowMasterDownConnections=true&allowSlavesDownConnections=true"
+    url: "jdbc:mysql://${PETCLINIC_TEST_DB_USER_NAME}:${PETCLINIC_TEST_DB_USER_PASSWORD}@${PETCLINIC_TEST_DB_HOST_URL}/${PETCLINIC_TEST_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul"
   jpa:
     hibernate:
       ddl-auto: create

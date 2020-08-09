@@ -12,4 +12,8 @@ interface VisitRepository: JpaRepository<Visit, Long> {
     @Transactional(readOnly = true)
     fun findAllByPetId(@Param("petId") petId: Long): List<Visit>
 
+    @Query(value = "SELECT * FROM visits WHERE id = :id AND pet_id = :petId", nativeQuery = true)
+    @Transactional(readOnly = true)
+    fun findByIdAndPetId(@Param("id") id: Long, @Param("petId") petId: Long): Visit?
+
 }
