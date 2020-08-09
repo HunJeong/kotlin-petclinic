@@ -4,13 +4,11 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: "jdbc:mysql:replication://${PETCLINIC_PRIMARY_DB_USER_NAME}:${PETCLINIC_PRIMARY_DB_USER_PASSWORD}@${PETCLINIC_PRIMARY_DB_HOST_URL},${PETCLINIC_SECONDARY_DB_USER_NAME}:${PETCLINIC_SECONDARY_DB_USER_PASSWORD}@${PETCLINIC_SECONDARY_DB_HOST_URL}/${PETCLINIC_PRIMARY_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&allowMasterDownConnections=true&allowSlavesDownConnections=true"
   flyway:
     enabled: true
-    user: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    user: ${PETCLINIC_PRIMARY_DB_USER_NAME}
+    password: ${PETCLINIC_PRIMARY_DB_USER_PASSWORD}
   output:
     ansi:
       enabled: ALWAYS
@@ -44,7 +42,7 @@ spring:
 spring:
   profiles: test
   datasource:
-    url: ${DB_URL_TEST}
+    url: "jdbc:mysql:replication//${PETCLINIC_TEST_DB_USER_NAME}:${PETCLINIC_TEST_DB_USER_PASSWORD}@${PETCLINIC_TEST_DB_HOST_URL},${PETCLINIC_TEST_DB_USER_NAME}:${PETCLINIC_TEST_DB_USER_PASSWORD}@${PETCLINIC_TEST_DB_HOST_URL}/${PETCLINIC_TEST_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&allowMasterDownConnections=true&allowSlavesDownConnections=true"
   jpa:
     hibernate:
       ddl-auto: create

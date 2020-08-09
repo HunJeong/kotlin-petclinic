@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  master:
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: 'root'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: 'petclinic'
+    volumes:
+      - ./mysql/master/config:/etc/mysql/conf.d
+      - ./mysql/master/script:/docker-entrypoint-initdb.d
+#      - /opt/persistence/mysql:/var/lib/mysql
+    ports:
+      - 3307:3306
+    networks:
+      - new
+
+  slave:
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: 'root'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: 'petclinic'
+    volumes:
+      - ./mysql/slave/config:/etc/mysql/conf.d
+      - ./mysql/slave/script:/docker-entrypoint-initdb.d
+#      - /opt/persistence/slave_mysql:/var/lib/mysql
+    ports:
+      - 3308:3306
+    networks:
+      - new
+
+  mysql_configure:
+    image: mysql:5.7
+    volumes:
+      - ./start_slave.sh:/tmp/start_slave.sh
+    entrypoint: ["/bin/bash", "-x", "/tmp/start_slave.sh"]
+    networks:
+      - new
+
+
+networks:
+  new:

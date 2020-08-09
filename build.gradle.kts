@@ -57,9 +57,9 @@ tasks {
 }
 
 flyway {
-    url = System.getenv("DB_URL")
-    user = System.getenv("DB_USERNAME")
-    password = System.getenv("DB_PASSWORD")
+    url = "jdbc:mysql://${System.getenv("PETCLINIC_PRIMARY_DB_HOST_URL")}/${System.getenv("PETCLINIC_PRIMARY_DB_NAME")}"
+    user = System.getenv("PETCLINIC_PRIMARY_DB_USER_NAME")
+    password = System.getenv("PETCLINIC_PRIMARY_DB_USER_PASSWORD")
 }
 
 allOpen {
