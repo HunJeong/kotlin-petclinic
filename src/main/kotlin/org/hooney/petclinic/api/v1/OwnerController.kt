@@ -24,7 +24,7 @@ class OwnerController(val ownerService: OwnerService) {
     @ResponseStatus(HttpStatus.CREATED)
     fun createOwner(
         @RequestBody @Valid body: OwnerCreateRequest
-    ) = ownerService.createOwner(body.firstName!!, body.lastName!!, body.address!!, body.city, body.telephone!!).let { OwnerResponse(it) }
+    ) = OwnerResponse(ownerService.createOwner(body.firstName, body.lastName, body.address, body.city, body.telephone))
 
     @PutMapping("/api/v1/owners/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun putOwner(

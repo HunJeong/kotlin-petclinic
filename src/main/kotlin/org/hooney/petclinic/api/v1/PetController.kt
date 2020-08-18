@@ -21,6 +21,6 @@ class PetController(
     fun postPets(
         @PathVariable("owner_id") ownerId: Long,
         @RequestBody @Valid body: PetCreateRequest
-    ) = PetResponse(petService.createOwnerPets(ownerId, body.name!!, body.birthDate!!, body.type!!))
+    ) = PetResponse(petService.createOwnerPets(ownerId, body.name, body.birthDate!!, body.type))
 
 }

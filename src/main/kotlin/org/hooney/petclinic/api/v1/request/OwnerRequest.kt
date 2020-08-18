@@ -1,14 +1,14 @@
 package org.hooney.petclinic.api.v1.request
 
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
 class OwnerCreateRequest(
-        @get:NotNull val firstName: String? = null,
-        @get:NotNull val lastName: String? = null,
-        @get:NotNull val address: String? = null,
+        @get:NotBlank val firstName: String = "",
+        @get:NotBlank val lastName: String = "",
+        @get:NotBlank val address: String = "",
         val city: String? = null,
-        @get:NotNull @get:Size(min = 9, max = 13) val telephone: String? = null
+        @get:NotBlank @get:Size(min = 9, max = 13) val telephone: String = ""
 )
 
 class OwnerPutRequest(
