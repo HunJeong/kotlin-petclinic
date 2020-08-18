@@ -11,7 +11,7 @@ class Vet(
     @Column(name = "last_name")
     var lastName: String? = null,
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinTable(name = "vet_specialties",
             joinColumns = [JoinColumn(name = "vet_id")],
             inverseJoinColumns = [JoinColumn(name = "speciality_id")]
