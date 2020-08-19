@@ -3,7 +3,7 @@ package org.hooney.petclinic.api.v1
 import com.github.javafaker.Faker
 import org.hooney.petclinic.entity.Visit
 import org.hooney.petclinic.service.VisitService
-import org.hooney.petclinic.test_utils.HttpBodyBuilder
+import org.hooney.petclinic.test_util.HttpBodyBuilder
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate

@@ -1,11 +1,10 @@
 package org.hooney.petclinic.repository
 
 import com.github.javafaker.Faker
-import org.hooney.petclinic.constants.Profile
+import org.hooney.petclinic.constant.Profile
 import org.hooney.petclinic.entity.Vet
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
-import org.hooney.petclinic.entity.Speciality
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -15,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
 import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 import kotlin.streams.toList
 
 @DataJpaTest

@@ -1,7 +1,7 @@
 package org.hooney.petclinic.handler
 
 import org.hooney.petclinic.api.v1.response.MessageResponse
-import org.hooney.petclinic.exceptions.PetClinicException
+import org.hooney.petclinic.exception.PetClinicException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

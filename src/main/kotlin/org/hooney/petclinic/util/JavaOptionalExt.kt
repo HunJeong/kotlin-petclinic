@@ -1,4 +1,4 @@
-package org.hooney.petclinic.utils
+package org.hooney.petclinic.util
 
 import java.util.*
 

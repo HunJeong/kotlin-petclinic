@@ -1,4 +1,4 @@
-package org.hooney.petclinic.exceptions
+package org.hooney.petclinic.exception
 
 import org.springframework.http.HttpStatus
 import java.lang.RuntimeException

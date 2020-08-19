@@ -1,4 +1,4 @@
-package org.hooney.petclinic.test_utils
+package org.hooney.petclinic.test_util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.mock.web.MockHttpServletResponse

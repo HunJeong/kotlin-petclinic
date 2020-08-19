@@ -1,4 +1,4 @@
-package org.hooney.petclinic.test_utils
+package org.hooney.petclinic.test_util
 
 import org.json.JSONObject
 

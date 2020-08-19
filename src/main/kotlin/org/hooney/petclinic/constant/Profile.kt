@@ -1,4 +1,4 @@
-package org.hooney.petclinic.constants
+package org.hooney.petclinic.constant
 
 object Profile {
     const val TEST = "test"

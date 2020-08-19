@@ -5,7 +5,7 @@ import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.entity.Pet
 import org.hooney.petclinic.entity.PetType
 import org.hooney.petclinic.service.PetService
-import org.hooney.petclinic.test_utils.HttpBodyBuilder
+import org.hooney.petclinic.test_util.HttpBodyBuilder
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

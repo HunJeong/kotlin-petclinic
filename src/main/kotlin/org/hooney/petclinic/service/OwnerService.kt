@@ -1,9 +1,8 @@
 package org.hooney.petclinic.service
 
-import org.hooney.petclinic.api.v1.response.OwnerResponse
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.repository.OwnerRepository
-import org.hooney.petclinic.utils.unwrap
+import org.hooney.petclinic.util.unwrap
 import org.springframework.stereotype.Service
 
 @Service

@@ -3,7 +3,7 @@ package org.hooney.petclinic.api.v1
 import com.github.javafaker.Faker
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.service.OwnerService
-import org.hooney.petclinic.test_utils.HttpBodyBuilder
+import org.hooney.petclinic.test_util.HttpBodyBuilder
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

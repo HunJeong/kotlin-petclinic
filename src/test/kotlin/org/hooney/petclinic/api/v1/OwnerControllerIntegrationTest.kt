@@ -1,11 +1,11 @@
 package org.hooney.petclinic.api.v1
 
 import com.github.javafaker.Faker
-import org.hooney.petclinic.constants.Profile
+import org.hooney.petclinic.constant.Profile
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.repository.OwnerRepository
-import org.hooney.petclinic.test_utils.HttpBodyBuilder
-import org.hooney.petclinic.utils.unwrap
+import org.hooney.petclinic.test_util.HttpBodyBuilder
+import org.hooney.petclinic.util.unwrap
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

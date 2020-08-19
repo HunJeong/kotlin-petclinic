@@ -3,7 +3,7 @@ package org.hooney.petclinic.api.v1
 import org.hooney.petclinic.api.v1.request.OwnerCreateRequest
 import org.hooney.petclinic.api.v1.request.OwnerPutRequest
 import org.hooney.petclinic.api.v1.response.OwnerResponse
-import org.hooney.petclinic.exceptions.OwnerNotFoundException
+import org.hooney.petclinic.exception.OwnerNotFoundException
 import org.hooney.petclinic.service.OwnerService
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus

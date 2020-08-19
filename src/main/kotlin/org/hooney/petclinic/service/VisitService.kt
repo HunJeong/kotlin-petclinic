@@ -1,8 +1,8 @@
 package org.hooney.petclinic.service
 
 import org.hooney.petclinic.entity.Visit
-import org.hooney.petclinic.exceptions.PetNotFoundException
-import org.hooney.petclinic.exceptions.VisitNotFoundException
+import org.hooney.petclinic.exception.PetNotFoundException
+import org.hooney.petclinic.exception.VisitNotFoundException
 import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.repository.PetRepository
 import org.hooney.petclinic.repository.VisitRepository
