@@ -35,6 +35,8 @@ dependencies {
     implementation("io.springfox", "springfox-swagger2", "2.9.2")
     implementation("io.springfox", "springfox-swagger-ui", "2.9.2")
 
+    implementation("org.apache.commons", "commons-lang3", "3.11")
+
     testImplementation(springBootStarter("test")) {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }
