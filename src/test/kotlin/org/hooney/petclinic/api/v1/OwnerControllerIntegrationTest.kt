@@ -3,6 +3,8 @@ package org.hooney.petclinic.api.v1
 import com.github.javafaker.Faker
 import org.hooney.petclinic.constant.Profile
 import org.hooney.petclinic.entity.Owner
+import org.hooney.petclinic.entity.OwnerCertification
+import org.hooney.petclinic.repository.OwnerCertificationRepository
 import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.test_util.HttpBodyBuilder
 import org.hooney.petclinic.util.unwrap
@@ -38,18 +40,20 @@ class OwnerControllerIntegrationTest {
     @Autowired
     lateinit var ownerRepository: OwnerRepository
 
+    @Autowired
+    lateinit var ownerCertificationRepository: OwnerCertificationRepository
+
     @Nested
     @DisplayName("POST /api/v1/owners")
     inner class CreateOwner {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
 
         @Test
         @DisplayName("성공")
         fun createOwner() {
-            val firstName = Faker().pokemon().name()
-            val lastName = Faker().pokemon().name()
-            val address = Faker().address().fullAddress()
-            val telephone = Faker().number().digits(10)
-
             assertEquals(ownerRepository.count(), 0)
             val action = mockMvc.perform(post("/api/v1/owners")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -68,13 +72,19 @@ class OwnerControllerIntegrationTest {
     @Nested
     @DisplayName("PUT /api/v1/owners/{ownerId}")
     inner class PutOwner {
+        val wasFirstName = Faker().pokemon().name()
+        val wasLastName = Faker().pokemon().name()
+        val wasAddress = Faker().address().fullAddress()
+        val wasTelephone = Faker().number().digits(10)
+
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+
         @Test
         @DisplayName("성공")
         fun putOwner() {
-            val wasFirstName = Faker().pokemon().name()
-            val wasLastName = Faker().pokemon().name()
-            val wasAddress = Faker().address().fullAddress()
-            val wasTelephone = Faker().number().digits(10)
             val owner = Owner(
                     firstName = wasFirstName,
                     lastName = wasLastName,
@@ -83,10 +93,6 @@ class OwnerControllerIntegrationTest {
             )
             ownerRepository.save(owner)
 
-            val firstName = Faker().pokemon().name()
-            val lastName = Faker().pokemon().name()
-            val address = Faker().address().fullAddress()
-            val telephone = Faker().number().digits(10)
             val action = mockMvc.perform(put("/api/v1/owners/${owner.id!!}")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(HttpBodyBuilder(
@@ -109,10 +115,6 @@ class OwnerControllerIntegrationTest {
         @Test
         @DisplayName("owner가 없음")
         fun putOwnerOwnerNotFound() {
-            val firstName = Faker().pokemon().name()
-            val lastName = Faker().pokemon().name()
-            val address = Faker().address().fullAddress()
-            val telephone = Faker().number().digits(10)
             val action = mockMvc.perform(put("/api/v1/owners/999").contentType(MediaType.APPLICATION_JSON)
                     .content(HttpBodyBuilder(
                             "firstName" to firstName,
@@ -128,13 +130,14 @@ class OwnerControllerIntegrationTest {
     @Nested
     @DisplayName("DELETE /api/1/owners/{ownerId}")
     inner class DeleteOwner {
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+
         @Test
         @DisplayName("성공")
         fun deleteOwner() {
-            val firstName = Faker().pokemon().name()
-            val lastName = Faker().pokemon().name()
-            val address = Faker().address().fullAddress()
-            val telephone = Faker().number().digits(10)
             val owner = Owner(
                     firstName = firstName,
                     lastName = lastName,
@@ -154,6 +157,66 @@ class OwnerControllerIntegrationTest {
             val id = Faker().number().randomNumber()
             mockMvc.perform(delete("/api/v1/owners/${id}"))
                     .andExpect(status().isNotFound)
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/v1/owners/signup")
+    inner class SignupOwner() {
+        val email = Faker().internet().emailAddress()
+        val password = Faker().internet().password(10, 16)
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+
+        @Test
+        @DisplayName("성공")
+        fun signupOwner() {
+            val wasOwnerCount = ownerRepository.count()
+            val wasOwnerCertificationCount = ownerCertificationRepository.count()
+
+            val action = mockMvc.perform(post("/api/v1/owners/signup").contentType(MediaType.APPLICATION_JSON)
+                .content(HttpBodyBuilder(
+                    "email" to email,
+                    "password" to password,
+                    "firstName" to firstName,
+                    "lastName" to lastName,
+                    "address" to address,
+                    "telephone" to telephone
+                ).build())
+            )
+
+            action.andExpect(status().isCreated)
+            assertEquals(ownerRepository.count(), wasOwnerCount + 1)
+            assertEquals(ownerCertificationRepository.count(), wasOwnerCertificationCount + 1)
+        }
+
+        @Test
+        @DisplayName("중복 이메일일 때")
+        fun signupOwnerExistedOwner() {
+            val owner = Owner(firstName, lastName, address, telephone)
+            ownerRepository.save(owner)
+            val ownerCertification = OwnerCertification(owner, email, password)
+            ownerCertificationRepository.save(ownerCertification)
+
+            val wasOwnerCount = ownerRepository.count()
+            val wasOwnerCertificationCount = ownerCertificationRepository.count()
+
+            val action = mockMvc.perform(post("/api/v1/owners/signup").contentType(MediaType.APPLICATION_JSON)
+                .content(HttpBodyBuilder(
+                    "email" to email,
+                    "password" to password,
+                    "firstName" to firstName,
+                    "lastName" to lastName,
+                    "address" to address,
+                    "telephone" to telephone
+                ).build())
+            )
+
+            action.andExpect(status().isBadRequest)
+            assertEquals(ownerRepository.count(), wasOwnerCount)
+            assertEquals(ownerCertificationRepository.count(), wasOwnerCertificationCount)
         }
     }
 

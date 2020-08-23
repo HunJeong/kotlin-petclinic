@@ -2,17 +2,23 @@ package org.hooney.petclinic.api.v1
 
 import org.hooney.petclinic.api.v1.request.OwnerCreateRequest
 import org.hooney.petclinic.api.v1.request.OwnerPutRequest
+import org.hooney.petclinic.api.v1.request.OwnerSignupRequest
 import org.hooney.petclinic.api.v1.response.OwnerResponse
 import org.hooney.petclinic.exception.OwnerNotFoundException
+import org.hooney.petclinic.service.OwnerCertificationService
 import org.hooney.petclinic.service.OwnerService
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-class OwnerController(val ownerService: OwnerService) {
+class OwnerController(
+    val ownerService: OwnerService,
+    val ownerCertificationService: OwnerCertificationService
+) {
 
     @GetMapping("/api/v1/owners", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getOwners() = this.ownerService.getOwners().map { OwnerResponse(it) }
@@ -38,5 +44,14 @@ class OwnerController(val ownerService: OwnerService) {
         ownerService.deleteOwner(id)
     } catch (e: EmptyResultDataAccessException) {
         throw OwnerNotFoundException()
+    }
+
+    @PostMapping("/api/v1/owners/signup", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
+    fun signupOwner(@RequestBody @Valid body: OwnerSignupRequest): OwnerResponse {
+        val owner = ownerService.createOwner(body.firstName, body.lastName, body.address, body.city, body.telephone)
+        ownerCertificationService.createOwnerCertification(owner, body.email, body.password)
+        return OwnerResponse(owner)
     }
 }
