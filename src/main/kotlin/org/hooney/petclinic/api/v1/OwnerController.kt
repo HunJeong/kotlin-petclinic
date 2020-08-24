@@ -2,6 +2,7 @@ package org.hooney.petclinic.api.v1
 
 import org.hooney.petclinic.api.v1.request.OwnerCreateRequest
 import org.hooney.petclinic.api.v1.request.OwnerPutRequest
+import org.hooney.petclinic.api.v1.request.OwnerSigninRequest
 import org.hooney.petclinic.api.v1.request.OwnerSignupRequest
 import org.hooney.petclinic.api.v1.response.OwnerResponse
 import org.hooney.petclinic.exception.OwnerNotFoundException
@@ -53,5 +54,10 @@ class OwnerController(
         val owner = ownerService.createOwner(body.firstName, body.lastName, body.address, body.city, body.telephone)
         ownerCertificationService.createOwnerCertification(owner, body.email, body.password)
         return OwnerResponse(owner)
+    }
+
+    @PostMapping("/api/v1/owners/signin", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun signinOwner(@RequestBody @Valid body: OwnerSigninRequest): OwnerResponse {
+        return OwnerResponse(ownerCertificationService.getOwnerCertification(body.email, body.password).owner)
     }
 }

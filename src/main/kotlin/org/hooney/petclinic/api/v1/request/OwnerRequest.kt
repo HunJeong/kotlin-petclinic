@@ -29,3 +29,8 @@ class OwnerSignupRequest(
         val city: String? = null,
         @get:Size(min = 9, max = 13) val telephone: String = ""
 )
+
+class OwnerSigninRequest(
+        @get:Email val email: String = "",
+        @get:Size(min = 10, max = 16) val password: String = ""
+)

@@ -4,6 +4,8 @@ import com.github.javafaker.Faker
 import org.hooney.petclinic.constant.Profile
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.entity.OwnerCertification
+import org.hooney.petclinic.exception.OwnerNotFoundException
+import org.hooney.petclinic.exception.WrongPasswordException
 import org.hooney.petclinic.repository.OwnerCertificationRepository
 import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.test_util.HttpBodyBuilder
@@ -23,6 +25,8 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 
@@ -217,6 +221,77 @@ class OwnerControllerIntegrationTest {
             action.andExpect(status().isBadRequest)
             assertEquals(ownerRepository.count(), wasOwnerCount)
             assertEquals(ownerCertificationRepository.count(), wasOwnerCertificationCount)
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /api/v1/owners/signin")
+    inner class SigninOwner() {
+        val email = Faker().internet().emailAddress()
+        val password = Faker().internet().password(10, 16)
+        val firstName = Faker().pokemon().name()
+        val lastName = Faker().pokemon().name()
+        val address = Faker().address().fullAddress()
+        val telephone = Faker().number().digits(10)
+
+        @Test
+        @DisplayName("성공")
+        fun signinOwner() {
+            val owner = Owner(firstName, lastName, address, telephone)
+            ownerRepository.save(owner)
+            val ownerCertification = OwnerCertification(owner, email, password)
+            ownerCertificationRepository.save(ownerCertification)
+
+            val action = mockMvc.perform(post("/api/v1/owners/signin").contentType(MediaType.APPLICATION_JSON)
+                .content(HttpBodyBuilder(
+                    "email" to email,
+                    "password" to password
+                ).build())
+            )
+
+            action.andExpect(status().isOk)
+        }
+
+        @Test
+        @DisplayName("비밀번호 틀림")
+        fun signinOwnerWrongPassword() {
+            val owner = Owner(firstName, lastName, address, telephone)
+            ownerRepository.save(owner)
+            val ownerCertification = OwnerCertification(owner, email, password)
+            ownerCertificationRepository.save(ownerCertification)
+
+            val _password = Faker().internet().password(10, 16)
+
+            val action = mockMvc.perform(post("/api/v1/owners/signin").contentType(MediaType.APPLICATION_JSON)
+                .content(HttpBodyBuilder(
+                    "email" to email,
+                    "password" to _password
+                ).build())
+            )
+
+            action.andExpect(status().isBadRequest)
+                .andExpect(jsonPath("$.message").value(WrongPasswordException().message))
+        }
+
+        @Test
+        @DisplayName("없는 계정")
+        fun signinOwnerNoOwner() {
+            val owner = Owner(firstName, lastName, address, telephone)
+            ownerRepository.save(owner)
+            val ownerCertification = OwnerCertification(owner, email, password)
+            ownerCertificationRepository.save(ownerCertification)
+
+            val _email = Faker().internet().emailAddress()
+
+            val action = mockMvc.perform(post("/api/v1/owners/signin").contentType(MediaType.APPLICATION_JSON)
+                .content(HttpBodyBuilder(
+                    "email" to _email,
+                    "password" to password
+                ).build())
+            )
+
+            action.andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.message").value(OwnerNotFoundException().message))
         }
     }
 
