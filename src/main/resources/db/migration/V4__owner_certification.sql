@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS owner_certifications (
     password VARCHAR(128) NOT NULL,
     disabled_at DATETIME,
     created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
+    updated_at DATETIME NOT NULL,
     UNIQUE(email),
     UNIQUE(owner_id),
     FOREIGN KEY (owner_id) REFERENCES owners(id)
