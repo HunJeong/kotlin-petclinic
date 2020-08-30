@@ -7,6 +7,6 @@ object TokenGenerator {
 
     private val secureRandom = SecureRandom()
 
-    fun generateToken(length: Int = 32): String = RandomStringUtils.random(length, 0, 0, true, true, null, secureRandom)
+    fun generateToken(length: Int = 16): String = RandomStringUtils.random(length, 0, 0, true, true, null, secureRandom)
 
 }

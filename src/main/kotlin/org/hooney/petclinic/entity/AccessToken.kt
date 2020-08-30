@@ -14,7 +14,7 @@ class AccessToken(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-    var owner: Owner? = null,
+    var owner: Owner,
 
     @Column(name = "expire_at")
     var expireAt: LocalDateTime? = defaultExpireAt()

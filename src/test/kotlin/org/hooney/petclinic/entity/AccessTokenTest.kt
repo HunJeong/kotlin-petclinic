@@ -13,24 +13,27 @@ class AccessTokenTest {
     @Nested
     @DisplayName("#isExpire")
     inner class IsExpire {
+
+        val owner = Owner()
+
         @Test
         @DisplayName("만료 안 됨")
         fun isExpireNotExpired() {
-            val accessToken = AccessToken()
+            val accessToken = AccessToken(owner = owner)
             assertFalse(accessToken.isExpire())
         }
 
         @Test
         @DisplayName("만료 됨")
         fun isExpireExpired() {
-            val accessToken = AccessToken(expireAt = LocalDateTime.now().minusHours(1))
+            val accessToken = AccessToken(owner = owner, expireAt = LocalDateTime.now().minusHours(1))
             assertTrue(accessToken.isExpire())
         }
 
         @Test
         @DisplayName("expireAt == null")
         fun isExpireExpireAtIsNull() {
-            val accessToken = AccessToken(expireAt = null)
+            val accessToken = AccessToken(owner = owner, expireAt = null)
             assertFalse(accessToken.isExpire())
         }
     }
