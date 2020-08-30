@@ -27,12 +27,6 @@ class OwnerController(
     @GetMapping("/api/v1/owners/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getOwner(@PathVariable("id") id: Long) = this.ownerService.getOwner(id)?.let { OwnerResponse(it) } ?: throw OwnerNotFoundException()
 
-    @PostMapping("/api/v1/owners", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ResponseStatus(HttpStatus.CREATED)
-    fun createOwner(
-        @RequestBody @Valid body: OwnerCreateRequest
-    ) = OwnerResponse(ownerService.createOwner(body.firstName, body.lastName, body.address, body.city, body.telephone))
-
     @PutMapping("/api/v1/owners/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun putOwner(
         @PathVariable("id") id: Long,

@@ -25,7 +25,6 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
@@ -46,32 +45,6 @@ class OwnerControllerIntegrationTest {
 
     @Autowired
     lateinit var ownerCertificationRepository: OwnerCertificationRepository
-
-    @Nested
-    @DisplayName("POST /api/v1/owners")
-    inner class CreateOwner {
-        val firstName = Faker().pokemon().name()
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(10)
-
-        @Test
-        @DisplayName("성공")
-        fun createOwner() {
-            assertEquals(ownerRepository.count(), 0)
-            val action = mockMvc.perform(post("/api/v1/owners")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(HttpBodyBuilder(
-                            "firstName" to firstName,
-                            "lastName" to lastName,
-                            "address" to address,
-                            "telephone" to telephone
-                    ).build())
-            )
-            action.andExpect(status().isCreated)
-            assertEquals(ownerRepository.count(), 1)
-        }
-    }
 
     @Nested
     @DisplayName("PUT /api/v1/owners/{ownerId}")

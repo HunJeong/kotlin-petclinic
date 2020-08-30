@@ -111,53 +111,6 @@ class OwnerControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /api/v1/owners")
-    inner class CreateOwner {
-        val firstName = Faker().pokemon().name()
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(10)
-
-        @Test
-        @DisplayName("필수 인자가 없을 때")
-        fun createOwnerMissRequiredParam() {
-            val action = mockMvc.perform(
-                post("/api/v1/owners")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        HttpBodyBuilder(
-                            "lastName" to lastName,
-                            "address" to address,
-                            "telephone" to telephone
-                        ).build()
-                    )
-            )
-            action.andExpect(status().isBadRequest)
-        }
-
-        @Test
-        @DisplayName("전화번호가 너무 길 때")
-        fun createOwnerTelephoneTooLong() {
-            val telephone = Faker().number().digits(15)
-
-            val action = mockMvc.perform(
-                post("/api/v1/owners")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        HttpBodyBuilder(
-                            "firstName" to firstName,
-                            "lastName" to lastName,
-                            "address" to address,
-                            "telephone" to telephone
-                        ).build()
-                    )
-            )
-
-            action.andExpect(status().isBadRequest)
-        }
-    }
-
-    @Nested
     @DisplayName("PUT /api/v1/owners/{ownerId}")
     inner class PutOwner {
         val firstName = Faker().pokemon().name()
