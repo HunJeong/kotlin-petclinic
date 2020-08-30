@@ -1,23 +1,17 @@
 package org.hooney.petclinic.repository
 
 import com.github.javafaker.Faker
-import org.hooney.petclinic.constant.Profile
 import org.hooney.petclinic.entity.Owner
+import org.hooney.petclinic.test_util.annotation.RepositoryTest
 import org.hooney.petclinic.util.unwrap
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.test.context.ActiveProfiles
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@ActiveProfiles(Profile.TEST)
+@RepositoryTest
 @DisplayName("OwnerRepository")
 class OwnerRepositoryTest {
 

@@ -1,36 +1,26 @@
 package org.hooney.petclinic.api.v1
 
 import com.github.javafaker.Faker
-import org.hooney.petclinic.constant.Profile
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.entity.OwnerCertification
 import org.hooney.petclinic.repository.AccessTokenRepository
 import org.hooney.petclinic.repository.OwnerCertificationRepository
 import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.test_util.HttpBodyBuilder
+import org.hooney.petclinic.test_util.annotation.IntegrationTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.transaction.annotation.Transactional
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional
-@ActiveProfiles(Profile.TEST)
+@IntegrationTest
 @DisplayName("LoginController")
 class LoginControllerIntegrationTest {
 

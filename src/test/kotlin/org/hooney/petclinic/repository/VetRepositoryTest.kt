@@ -1,24 +1,18 @@
 package org.hooney.petclinic.repository
 
 import com.github.javafaker.Faker
-import org.hooney.petclinic.constant.Profile
 import org.hooney.petclinic.entity.Vet
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
+import org.hooney.petclinic.test_util.annotation.RepositoryTest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.ActiveProfiles
 import javax.persistence.EntityManager
 import kotlin.streams.toList
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@ActiveProfiles(Profile.TEST)
+@RepositoryTest
 @DisplayName("VetRepository")
 class VetRepositoryTest {
 
