@@ -12,6 +12,9 @@ import org.hooney.petclinic.repository.OwnerCertificationRepository
 import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.test_util.HttpBodyBuilder
 import org.hooney.petclinic.test_util.annotation.IntegrationTest
+import org.hooney.petclinic.test_util.fixture.Fixture
+import org.hooney.petclinic.test_util.fixture.owner
+import org.hooney.petclinic.test_util.fixture.ownerCertification
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -100,7 +103,7 @@ class LoginControllerIntegrationTest {
 
         @BeforeEach
         fun beforeEach() {
-            val owner = Owner(
+            val owner = Fixture.owner(
                 firstName = firstName,
                 lastName = lastName,
                 telephone = telephone,
@@ -108,7 +111,7 @@ class LoginControllerIntegrationTest {
             )
             ownerRepository.save(owner)
 
-            val ownerCertification = OwnerCertification(
+            val ownerCertification = Fixture.ownerCertification(
                 owner = owner,
                 email = email,
                 password = password

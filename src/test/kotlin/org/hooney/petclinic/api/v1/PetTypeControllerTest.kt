@@ -1,9 +1,8 @@
 package org.hooney.petclinic.api.v1
 
-import com.github.javafaker.Faker
-import org.hooney.petclinic.entity.PetType
-import org.hooney.petclinic.repository.PetTypeRepository
 import org.hooney.petclinic.service.PetTypeService
+import org.hooney.petclinic.test_util.fixture.Fixture
+import org.hooney.petclinic.test_util.fixture.petType
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -32,7 +31,7 @@ class PetTypeControllerTest {
         @DisplayName("성공")
         fun getPetTypes() {
             //given
-            val petType = PetType(Faker().pokemon().name())
+            val petType = Fixture.petType()
             given(petTypeService.findAll()).willReturn(listOf(petType))
 
             //when

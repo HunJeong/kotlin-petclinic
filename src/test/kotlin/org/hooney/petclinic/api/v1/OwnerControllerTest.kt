@@ -1,10 +1,11 @@
 package org.hooney.petclinic.api.v1
 
 import com.github.javafaker.Faker
-import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.service.OwnerCertificationService
 import org.hooney.petclinic.service.OwnerService
 import org.hooney.petclinic.test_util.HttpBodyBuilder
+import org.hooney.petclinic.test_util.fixture.Fixture
+import org.hooney.petclinic.test_util.fixture.owner
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -14,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
@@ -56,8 +56,8 @@ class OwnerControllerTest {
             //given
             given(ownerService.getOwners())
                 .willReturn(listOf(
-                    Owner("World", "Hello").also { it.id = 1 },
-                    Owner("World", "Hell").also { it.id = 2 }
+                    Fixture.owner(firstName = "World", lastName = "Hello").also { it.id = 1 },
+                    Fixture.owner(firstName = "World", lastName = "Hell").also { it.id = 2 }
                 ))
 
             //when
@@ -78,7 +78,7 @@ class OwnerControllerTest {
     inner class GetOwner {
 
         val id = Faker().number().randomNumber()
-        val owner = Owner(firstName = Faker().pokemon().name()).also { it.id = 1 }
+        val owner = Fixture.owner().also { it.id = 1 }
 
         @Test
         @DisplayName("Owner 존재")

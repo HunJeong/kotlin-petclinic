@@ -7,6 +7,8 @@ import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.repository.OwnerRepository
 import org.hooney.petclinic.test_util.HttpBodyBuilder
 import org.hooney.petclinic.test_util.annotation.IntegrationTest
+import org.hooney.petclinic.test_util.fixture.Fixture
+import org.hooney.petclinic.test_util.fixture.owner
 import org.hooney.petclinic.util.unwrap
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -29,11 +31,6 @@ class OwnerControllerIntegrationTest {
     @Nested
     @DisplayName("PUT /api/v1/owners/{ownerId}")
     inner class PutOwner {
-        val wasFirstName = Faker().pokemon().name()
-        val wasLastName = Faker().pokemon().name()
-        val wasAddress = Faker().address().fullAddress()
-        val wasTelephone = Faker().number().digits(10)
-
         val firstName = Faker().pokemon().name()
         val lastName = Faker().pokemon().name()
         val address = Faker().address().fullAddress()
@@ -61,12 +58,7 @@ class OwnerControllerIntegrationTest {
         @Test
         @DisplayName("성공")
         fun putOwner() {
-            val owner = Owner(
-                firstName = wasFirstName,
-                lastName = wasLastName,
-                address = wasAddress,
-                telephone = wasTelephone
-            )
+            val owner = Fixture.owner()
             ownerRepository.save(owner)
 
             val response = subject<OwnerResponse>(owner.id!!)
@@ -93,10 +85,6 @@ class OwnerControllerIntegrationTest {
     @Nested
     @DisplayName("DELETE /api/1/owners/{ownerId}")
     inner class DeleteOwner {
-        val firstName = Faker().pokemon().name()
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(10)
 
         inline fun <reified T> subject(ownerId: Long): ResponseEntity<T> {
             return testRestTemplate.exchange(
@@ -113,12 +101,7 @@ class OwnerControllerIntegrationTest {
         @Test
         @DisplayName("성공")
         fun deleteOwner() {
-            val owner = Owner(
-                firstName = firstName,
-                lastName = lastName,
-                address = address,
-                telephone = telephone
-            )
+            val owner = Fixture.owner()
             ownerRepository.save(owner)
 
             val response = subject<OwnerResponse>(owner.id!!)
@@ -130,8 +113,8 @@ class OwnerControllerIntegrationTest {
         @DisplayName("사용자 없음")
         fun deleteOwnerNoData() {
             val id = Faker().number().randomNumber()
-            val respones = subject<OwnerResponse>(id)
-            assertEquals(respones.statusCode, HttpStatus.NOT_FOUND)
+            val response = subject<OwnerResponse>(id)
+            assertEquals(response.statusCode, HttpStatus.NOT_FOUND)
         }
     }
 }

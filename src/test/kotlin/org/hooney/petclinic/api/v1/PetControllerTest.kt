@@ -6,6 +6,9 @@ import org.hooney.petclinic.entity.Pet
 import org.hooney.petclinic.entity.PetType
 import org.hooney.petclinic.service.PetService
 import org.hooney.petclinic.test_util.HttpBodyBuilder
+import org.hooney.petclinic.test_util.fixture.Fixture
+import org.hooney.petclinic.test_util.fixture.owner
+import org.hooney.petclinic.test_util.fixture.pet
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -39,10 +42,9 @@ class PetControllerTest {
         @DisplayName("성공")
         fun getPets() {
             //given
-            val owner = Owner()
-            owner.id = Faker().number().randomNumber()
-            val pet1 = Pet(name = Faker().pokemon().name(), birthDate = LocalDate.now(), owner = owner)
-            val pet2 = Pet(name = Faker().pokemon().name(), birthDate = LocalDate.now(), owner = owner)
+            val owner = Fixture.owner().also { it.id = Faker().number().randomNumber() }
+            val pet1 = Fixture.pet(owner = owner)
+            val pet2 = Fixture.pet(owner = owner)
             given(petService.getOwnerPets(owner.id!!))
                     .willReturn(listOf(pet1, pet2))
 
@@ -64,14 +66,13 @@ class PetControllerTest {
         @DisplayName("성공")
         fun postPets() {
             //given
-            val owner = Owner()
-            owner.id = Faker().number().randomNumber()
+            val owner = Fixture.owner().also { it.id = Faker().number().randomNumber() }
             val name = Faker().pokemon().name()
             val birthDate = LocalDate.now()
             val birthDateString = birthDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             val type = Faker().pokemon().name()
             given(petService.createOwnerPets(owner.id!!, name, birthDate, type))
-                    .willReturn(Pet(name = name, birthDate = birthDate, type = PetType()))
+                    .willReturn(Fixture.pet(name = name, birthDate = birthDate, type = PetType()))
 
             //when
             val action = mockMvc.perform(post("/api/v1/owners/${owner.id}/pets")
