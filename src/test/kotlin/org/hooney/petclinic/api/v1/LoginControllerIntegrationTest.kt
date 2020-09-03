@@ -1,6 +1,10 @@
 package org.hooney.petclinic.api.v1
 
 import com.github.javafaker.Faker
+import org.hooney.petclinic.api.v1.request.SignupRequest
+import org.hooney.petclinic.api.v1.response.AccessTokenResponse
+import org.hooney.petclinic.api.v1.response.MessageResponse
+import org.hooney.petclinic.entity.AccessToken
 import org.hooney.petclinic.entity.Owner
 import org.hooney.petclinic.entity.OwnerCertification
 import org.hooney.petclinic.repository.AccessTokenRepository
@@ -14,18 +18,17 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.*
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.util.MultiValueMap
 
 @IntegrationTest
 @DisplayName("LoginController")
 class LoginControllerIntegrationTest {
 
     @Autowired
-    lateinit var mockMvc: MockMvc
+    lateinit var testRestTemplate: TestRestTemplate
 
     @Autowired
     lateinit var ownerRepository: OwnerRepository
@@ -39,34 +42,44 @@ class LoginControllerIntegrationTest {
     @Nested
     @DisplayName("POST /api/v1/signup")
     inner class Signup {
-        val firstName = Faker().pokemon().name()
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(10)
+        var firstName = Faker().pokemon().name()
+        var lastName = Faker().pokemon().name()
+        var address = Faker().address().fullAddress()
+        var telephone = Faker().number().digits(10)
 
-        val email = Faker().internet().emailAddress()
-        val password = Faker().internet().password(10, 16)
+        var email = Faker().internet().emailAddress()
+        var password = Faker().internet().password(10, 16)
+
+        var params = mutableMapOf(
+            "firstName" to firstName,
+            "lastName" to lastName,
+            "address" to address,
+            "telephone" to telephone,
+            "email" to email,
+            "password" to password
+        )
+
+        inline fun <reified T> subject(): ResponseEntity<T> {
+            return testRestTemplate.exchange(
+                "/api/v1/signup",
+                HttpMethod.POST,
+                HttpEntity(
+                    HttpBodyBuilder(params).build(),
+                    HttpHeaders().apply { this.contentType = MediaType.APPLICATION_JSON }
+                ),
+                T::class.java
+            )
+        }
 
         @Test
         @DisplayName("성공")
         fun signup() {
             assertEquals(ownerRepository.count(), 0)
             assertEquals(accessTokenRepository.count(), 0)
-            val action = mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/v1/signup")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        HttpBodyBuilder(
-                            "firstName" to firstName,
-                            "lastName" to lastName,
-                            "address" to address,
-                            "telephone" to telephone,
-                            "email" to email,
-                            "password" to password
-                        ).build()
-                    )
-            )
-            action.andExpect(MockMvcResultMatchers.status().isCreated)
+
+            val response = subject<AccessTokenResponse>()
+
+            assertEquals(response.statusCode, HttpStatus.CREATED)
             assertEquals(ownerRepository.count(), 1)
             assertEquals(accessTokenRepository.count(), 1)
         }
@@ -75,13 +88,15 @@ class LoginControllerIntegrationTest {
     @Nested
     @DisplayName("POST /api/v1/signin")
     inner class Signin {
-        val firstName = Faker().pokemon().name()
-        val lastName = Faker().pokemon().name()
-        val address = Faker().address().fullAddress()
-        val telephone = Faker().number().digits(10)
+        var firstName = Faker().pokemon().name()
+        var lastName = Faker().pokemon().name()
+        var address = Faker().address().fullAddress()
+        var telephone = Faker().number().digits(10)
 
-        val email = Faker().internet().emailAddress()
-        val password = Faker().internet().password(10, 16)
+        var email = Faker().internet().emailAddress()
+        var password = Faker().internet().password(10, 16)
+
+        var params = mutableMapOf("email" to email, "password" to password)
 
         @BeforeEach
         fun beforeEach() {
@@ -101,62 +116,56 @@ class LoginControllerIntegrationTest {
             ownerCertificationRepository.save(ownerCertification)
         }
 
+        inline fun <reified T> subject(): ResponseEntity<T> {
+            return testRestTemplate.exchange(
+                "/api/v1/signin",
+                HttpMethod.POST,
+                HttpEntity(
+                    HttpBodyBuilder(params).build(),
+                    HttpHeaders().apply { this.contentType = MediaType.APPLICATION_JSON }
+                ),
+                T::class.java
+            )
+        }
+
         @Test
         @DisplayName("성공")
         fun signin() {
             val wasAccessTokenCount = accessTokenRepository.count()
-            val action = mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/v1/signin")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        HttpBodyBuilder(
-                            "email" to email,
-                            "password" to password
-                        ).build()
-                    )
-            )
+
+            val response = subject<AccessTokenResponse>()
+
             val changedAccessTokenCount = accessTokenRepository.count() - wasAccessTokenCount
-            action.andExpect(status().isOk)
+            assertEquals(response.statusCode, HttpStatus.OK)
             assertEquals(changedAccessTokenCount, 1)
         }
 
         @Test
         @DisplayName("잘못된 이메일")
         fun signingNoOwner() {
-            val _email = Faker().internet().emailAddress()
+            params["email"] = Faker().internet().emailAddress()
             val wasAccessTokenCount = accessTokenRepository.count()
-            val action = mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/v1/signin")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        HttpBodyBuilder(
-                            "email" to _email,
-                            "password" to password
-                        ).build()
-                    )
-            )
+
+            val response = subject<MessageResponse>()
+
             val changedAccessTokenCount = accessTokenRepository.count() - wasAccessTokenCount
-            action.andExpect(status().isNotFound)
+            assertEquals(response.statusCode, HttpStatus.NOT_FOUND)
+            assertEquals(response.body.success, false)
             assertEquals(changedAccessTokenCount, 0)
         }
 
         @Test
         @DisplayName("잘못된 비밀번호")
         fun signinInvalidPassword() {
-            val _password = Faker().internet().password(10, 16)
+            params["password"] = Faker().internet().password(10, 16)
+
             val wasAccessTokenCount = accessTokenRepository.count()
-            val action = mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/v1/signin")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        HttpBodyBuilder(
-                            "email" to email,
-                            "password" to _password
-                        ).build()
-                    )
-            )
+
+            val response = subject<MessageResponse>()
+
             val changedAccessTokenCount = accessTokenRepository.count() - wasAccessTokenCount
-            action.andExpect(status().isBadRequest)
+            assertEquals(response.statusCode, HttpStatus.BAD_REQUEST)
+            assertEquals(response.body.success, false)
             assertEquals(changedAccessTokenCount, 0)
         }
     }

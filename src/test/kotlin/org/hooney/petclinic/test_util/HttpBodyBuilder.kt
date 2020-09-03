@@ -2,9 +2,11 @@ package org.hooney.petclinic.test_util
 
 import org.json.JSONObject
 
-class HttpBodyBuilder(vararg pairs: Pair<String, Any?>) {
+class HttpBodyBuilder(pairs: MutableMap<String, *>) {
 
-    private val pairs = pairs
+    constructor(vararg pairs: Pair<String, Any?>): this(pairs.toMap().toMutableMap())
 
-    fun build() = JSONObject(hashMapOf(*pairs)).toString()
+    private var pairs = pairs
+
+    fun build() = JSONObject(pairs).toString()
 }

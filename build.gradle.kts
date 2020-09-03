@@ -69,3 +69,7 @@ allOpen {
     annotation("javax.persistence.MappedSuperclass")
     annotation("javax.persistence.Embeddable")
 }
+
+noArg {
+    annotation("org.hooney.petclinic.annotation.NoArgConstructor")
+}
