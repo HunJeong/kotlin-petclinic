@@ -40,18 +40,4 @@ class OwnerController(
     } catch (e: EmptyResultDataAccessException) {
         throw OwnerNotFoundException()
     }
-
-    @PostMapping("/api/v1/owners/signup", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ResponseStatus(HttpStatus.CREATED)
-    @Transactional
-    fun signupOwner(@RequestBody @Valid body: OwnerSignupRequest): OwnerResponse {
-        val owner = ownerService.createOwner(body.firstName, body.lastName, body.address, body.city, body.telephone)
-        ownerCertificationService.createOwnerCertification(owner, body.email, body.password)
-        return OwnerResponse(owner)
-    }
-
-    @PostMapping("/api/v1/owners/signin", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun signinOwner(@RequestBody @Valid body: OwnerSigninRequest): OwnerResponse {
-        return OwnerResponse(ownerCertificationService.getOwnerCertification(body.email, body.password).owner)
-    }
 }
