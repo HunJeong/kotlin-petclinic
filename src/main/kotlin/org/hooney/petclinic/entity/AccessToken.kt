@@ -21,7 +21,7 @@ class AccessToken(
 ): Base() {
 
     companion object {
-        private fun defaultExpireAt() = LocalDateTime.now().plusHours(6)
+        fun defaultExpireAt() = LocalDateTime.now().plusHours(6)
     }
 
     fun isExpire() = expireAt?.let { it < LocalDateTime.now() } ?: false

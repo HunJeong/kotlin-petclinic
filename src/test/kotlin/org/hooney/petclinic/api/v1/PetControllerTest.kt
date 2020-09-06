@@ -2,11 +2,13 @@ package org.hooney.petclinic.api.v1
 
 import com.github.javafaker.Faker
 import org.hooney.petclinic.entity.Owner
-import org.hooney.petclinic.entity.Pet
 import org.hooney.petclinic.entity.PetType
+import org.hooney.petclinic.repository.AccessTokenRepository
+import org.hooney.petclinic.service.AccessTokenService
 import org.hooney.petclinic.service.PetService
 import org.hooney.petclinic.test_util.HttpBodyBuilder
 import org.hooney.petclinic.test_util.fixture.Fixture
+import org.hooney.petclinic.test_util.fixture.accessToken
 import org.hooney.petclinic.test_util.fixture.owner
 import org.hooney.petclinic.test_util.fixture.pet
 import org.junit.jupiter.api.DisplayName
@@ -16,16 +18,19 @@ import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@WebMvcTest(PetController::class, PetService::class)
+@WebMvcTest(PetController::class, PetService::class, AccessTokenService::class)
 @DisplayName("PetController")
 class PetControllerTest {
 
@@ -34,6 +39,9 @@ class PetControllerTest {
 
     @MockBean
     lateinit var petService: PetService
+
+    @MockBean
+    lateinit var accessTokenService: AccessTokenService
 
     @Nested
     @DisplayName("GET /api/v1/owners/{ownerId}/pets")
@@ -87,6 +95,37 @@ class PetControllerTest {
             action.andExpect(status().isCreated)
                     .andExpect(jsonPath("$.name").value(name))
                     .andExpect(jsonPath("$.birthDate").value(birthDateString))
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /api/v1/pets")
+    inner class GetPets2 {
+
+        val owner = Fixture.owner().apply { this.id = Faker().number().randomNumber() }
+        val accessToken = Fixture.accessToken(owner = owner)
+        val pet = Fixture.pet(owner = owner)
+
+        fun subject(): ResultActions {
+            return mockMvc.perform(
+                get("/api/v1/pets")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer ${accessToken.token}")
+            )
+        }
+
+        @Test
+        @DisplayName("성공")
+        fun getPets() {
+            //given
+            given(accessTokenService.findByToken(accessToken.token))
+                .willReturn(accessToken)
+            given(petService.getOwnerPets(owner.id!!))
+                .willReturn(listOf(pet))
+
+            // when
+            val action = subject()
+            action.andExpect(status().isOk)
+                .andExpect(jsonPath("$[0].name").value(pet.name!!))
         }
     }
 

@@ -16,4 +16,6 @@ class AccessTokenService(
         return AccessToken(owner = owner).let { accessTokenRepository.save(it) }
     }
 
+    fun findByToken(token: String): AccessToken? = accessTokenRepository.findByToken(token)
+
 }
