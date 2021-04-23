@@ -44,14 +44,14 @@ dependencies {
 }
 
 configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
 }
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
     test {
         useJUnitPlatform()
@@ -59,9 +59,9 @@ tasks {
 }
 
 flyway {
-    url = "jdbc:mysql://${System.getenv("PETCLINIC_PRIMARY_DB_HOST_URL")}/${System.getenv("PETCLINIC_PRIMARY_DB_NAME")}"
-    user = System.getenv("PETCLINIC_PRIMARY_DB_USER_NAME")
-    password = System.getenv("PETCLINIC_PRIMARY_DB_USER_PASSWORD")
+    url = "jdbc:mysql://127.0.0.1:3307/petclinic"
+    user = "root"
+    password = ""
 }
 
 allOpen {
