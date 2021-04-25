@@ -5,8 +5,18 @@ spring:
     location: classpath:banner.txt
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql:replication://${PETCLINIC_PRIMARY_DB_USER_NAME}:${PETCLINIC_PRIMARY_DB_USER_PASSWORD}@${PETCLINIC_PRIMARY_DB_HOST_URL},${PETCLINIC_SECONDARY_DB_USER_NAME}:${PETCLINIC_SECONDARY_DB_USER_PASSWORD}@${PETCLINIC_SECONDARY_DB_HOST_URL}/${PETCLINIC_PRIMARY_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&allowMasterDownConnections=true&allowSlavesDownConnections=true"
+    primary:
+      jdbc-url: "jdbc:mysql://${PETCLINIC_PRIMARY_DB_HOST_URL}/${PETCLINIC_PRIMARY_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul"
+      username: ${PETCLINIC_PRIMARY_DB_USER_NAME}
+      password: ${PETCLINIC_PRIMARY_DB_USER_PASSWORD}
+      validation-query: SELECT 1
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    secondary:
+      jdbc-url: "jdbc:mysql://${PETCLINIC_SECONDARY_DB_HOST_URL}/${PETCLINIC_SECONDARY_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul"
+      username: ${PETCLINIC_SECONDARY_DB_USER_NAME}
+      password: ${PETCLINIC_SECONDARY_DB_USER_PASSWORD}
+      validation-query: SELECT 1
+      driver-class-name: com.mysql.cj.jdbc.Driver
   flyway:
     enabled: true
     user: ${PETCLINIC_PRIMARY_DB_USER_NAME}
