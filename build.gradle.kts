@@ -1,11 +1,12 @@
 plugins {
+    val kotlinVersion = "1.4.32"
     java
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version kotlinVersion
 
-    kotlin("plugin.spring") version "1.3.72"
-    kotlin("plugin.jpa") version "1.3.72"
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
 
-    id("org.springframework.boot") version "2.3.1.RELEASE"
+    id("org.springframework.boot") version "2.4.5"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
 
     id("org.flywaydb.flyway") version "6.4.4"
@@ -30,7 +31,7 @@ dependencies {
     implementation(springBootStarter("data-jpa"))
     implementation(springBootStarter("validation"))
 
-    implementation("mysql", "mysql-connector-java", "8.0.20")
+    implementation("mysql", "mysql-connector-java", "8.0.24")
 
     implementation("io.springfox", "springfox-swagger2", "2.9.2")
     implementation("io.springfox", "springfox-swagger-ui", "2.9.2")
